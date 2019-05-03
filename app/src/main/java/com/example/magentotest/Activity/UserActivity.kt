@@ -9,10 +9,7 @@ import android.widget.Toast
 import com.example.magentotest.Adapter.ProductAdapter
 import com.example.magentotest.ProductViewModel
 import com.example.magentotest.R
-import com.example.magentotest.RetrofitAPI
 import com.example.magentotest.Room.Model.ProductRoom
-import com.example.magentotest.RoomAPI
-import com.example.magentotest.data.Product.ProductList
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -24,7 +21,6 @@ class UserActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(ProductViewModel::class.java)
     }
     lateinit var tokenObserver: Observer<String>
-    lateinit var listOfProductObserver: Observer<ProductList>
     lateinit var listofProductsRoomObserver: Observer<List<ProductRoom>>
 
 
@@ -35,35 +31,20 @@ class UserActivity : AppCompatActivity() {
         productViewModel.tokenLIVE.value = intent.getStringExtra("Token")
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+tv_title.setOnClickListener { productViewModel.saveImages(productViewModel.productsList) }
 
-        btn_saveToDB.setOnClickListener {
 
-            var listofProductRoom =
-                productViewModel.convertProductsToProductsRoom(productViewModel.productsListLIVE.value!!)
+        tokenObserver = Observer {
+
             Observable.fromCallable {
-                for (item in listofProductRoom) {
-                    productViewModel.insert(item)
-                }
+                productViewModel.gelAllProduct("Room")
+                productViewModel.gelAllProduct("Retrofit")
             }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe {
-                    Toast.makeText(this, "OK", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "WELCOME", Toast.LENGTH_LONG).show()
                 }
-
-        }
-
-        buttonGetAll.setOnClickListener {
-
-            Observable.fromCallable {
-                productViewModel.gelAllProduct(RoomAPI())
-            }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    Toast.makeText(this, "OK", Toast.LENGTH_LONG).show()
-                }
-
         }
 
         listofProductsRoomObserver = Observer {
@@ -75,20 +56,9 @@ class UserActivity : AppCompatActivity() {
             }
         }
 
-        tokenObserver = Observer {
-            productViewModel.gelAllProduct(RetrofitAPI())
 
-        }
-
-        listOfProductObserver = Observer {
-            //            if (it != null) {
-//                val productAdapter = ProductAdapter(it)
-//                recyclerView.adapter = productAdapter
-//            }
-        }
 
         productViewModel.tokenLIVE.observe(this, tokenObserver)
-        productViewModel.productsListLIVE.observe(this, listOfProductObserver)
         productViewModel.productsRoomLIVE.observe(this, listofProductsRoomObserver)
     }
 

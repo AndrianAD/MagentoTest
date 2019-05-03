@@ -7,11 +7,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.bumptech.glide.Glide
 import com.example.magentotest.Activity.DetailsActivity
 import com.example.magentotest.R
 import com.example.magentotest.Room.Model.ProductRoom
-import com.example.magentotest.Utils.imageBaseURL
 import kotlinx.android.synthetic.main.recycler_view_element.view.*
 
 
@@ -43,19 +41,18 @@ class ProductAdapter(productList: List<ProductRoom>) : RecyclerView.Adapter<Prod
 
 
 
-
-        var finalUrl: Any
-        if(listProducts.isNotEmpty()) {
-            var file: String = listProducts.items.get(position).media_gallery_entries.get(0).file
-            finalUrl = "$imageBaseURL$file"
-
-        }else{
-            finalUrl = R.drawable.no_image_available
-        }
-        Glide.with(context)
-            .load(finalUrl)
-            .error(R.drawable.no_image_available)
-            .into(parent.imageView)
+//        var finalUrl: Any
+//        if(listProducts.isNotEmpty()) {
+//            var file: String = listProducts.items.get(position).media_gallery_entries.get(0).file
+//            finalUrl = "$imageBaseURL$file"
+//
+//        }else{
+//            finalUrl = R.drawable.no_image_available
+//        }
+//        Glide.with(context)
+//            .load(finalUrl)
+//            .error(R.drawable.no_image_available)
+//            .into(parent.imageView)
 
 
 
@@ -63,7 +60,6 @@ class ProductAdapter(productList: List<ProductRoom>) : RecyclerView.Adapter<Prod
             val intent = Intent(context, DetailsActivity::class.java)
             intent.putExtra("position", position.toString())
             context.startActivity(intent)
-
         }
 
 //        fun getListOfAllImageFromProductRoom(value: ProductRoom): List<String>{

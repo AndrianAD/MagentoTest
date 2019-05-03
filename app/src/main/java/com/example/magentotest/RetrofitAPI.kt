@@ -26,7 +26,8 @@ class RetrofitAPI : BaseAPI {
 
                 override fun onResponse(call: Call<ProductList>, response: Response<ProductList>) {
                     Log.v("retrofit", response.message())
-                    viewModel.productsListLIVE.value = response.body()
+                    viewModel.productsList= response.body()!!
+                    viewModel.saveToDb()
                 }
             })
     }

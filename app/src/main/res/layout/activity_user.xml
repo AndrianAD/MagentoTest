@@ -21,6 +21,7 @@
                 android:textColor="@color/colorAccent"
                 android:id="@+id/tv_title"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="10dp"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"/>
@@ -29,29 +30,13 @@
                 android:id="@+id/recyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-         app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/tv_title"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_margin="10dp"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/btn_saveToDB"
                 app:layout_constraintEnd_toEndOf="parent">
         </android.support.v7.widget.RecyclerView>
 
-        <Button
-                android:text="Save All Products To DB"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:id="@+id/btn_saveToDB"
-                android:layout_marginTop="20dp"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title"
-                app:layout_constraintEnd_toEndOf="parent" app:layout_constraintHorizontal_bias="0.078"/>
-        <Button
-                android:text="gettAllProducts"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                app:layout_constraintStart_toEndOf="@id/btn_saveToDB"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/tv_title"
-                android:layout_marginTop="20dp"
-                android:id="@+id/buttonGetAll"/>
+
     </android.support.constraint.ConstraintLayout>
 </ScrollView>

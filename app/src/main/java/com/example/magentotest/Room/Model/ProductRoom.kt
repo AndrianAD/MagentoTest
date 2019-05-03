@@ -1,9 +1,12 @@
 package com.example.magentotest.Room.Model
 
-import android.arch.persistence.room.*
+import android.arch.persistence.room.ColumnInfo
+import android.arch.persistence.room.Entity
+import android.arch.persistence.room.Index
+import android.arch.persistence.room.PrimaryKey
 import com.example.magentotest.data.Product.Product
 
-@Entity(tableName = "products",indices = arrayOf(Index(value = ["sku"], unique = true)))
+@Entity(tableName = "products", indices = arrayOf(Index(value = ["sku"], unique = true)))
 
 data class ProductRoom(
     @PrimaryKey(autoGenerate = true)
@@ -15,13 +18,13 @@ data class ProductRoom(
     var price: Int,
     var sku: String,
     var status: Int = 1,
-    var quantity: Int = 0,
-    var image: List<String>
+    var quantity: Int = 0
 ) {
 
 
     //TODO stock_item.qty - to change!
-    constructor(product: Product, images:List<String>) : this(
+    constructor(product: Product) : this(
         0, product.name, product.type_id, product.price, product.sku, product.status,
-        0, images)
+        0
+    )
 }
