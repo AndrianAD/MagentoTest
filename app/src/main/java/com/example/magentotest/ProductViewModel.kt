@@ -33,7 +33,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     fun gelAllProduct(type: String) {
         android.util.Log.e(
-            "@@@", "getAllProduct, type: "
+            "Magento", "getAllProduct, type: "
                     + type + ", thread: " + Thread.currentThread().name
         )
         when (type) {
@@ -50,14 +50,13 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     fun saveToDb() {
         Log.e("Magento", "saveToDB, " + ", thread: " + Thread.currentThread().name)
         var listofProductRoom = convertProductsToProductsRoom(productsList)
-
+        saveImages(productsList)
         GlobalScope.launch(Dispatchers.Default) {
             for (item in listofProductRoom) {
                 insert(item)
             }
             gelAllProduct("Room")
         }
-
     }
 
     fun saveImages(products: ProductList) {
@@ -76,7 +75,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                 for (item in listOfFoto) {
                     productDao.insertImage(item)
                 }
-
             }
         }
 

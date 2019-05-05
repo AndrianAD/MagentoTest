@@ -7,17 +7,20 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import com.example.magentotest.Activity.DetailsActivity
 import com.example.magentotest.R
 import com.example.magentotest.Room.Model.ProductRoom
+import com.example.magentotest.Room.Model.ProductWithImages
+import com.example.magentotest.Utils.imageBaseURL
 import kotlinx.android.synthetic.main.recycler_view_element.view.*
 
 
-class ProductAdapter(productList: List<ProductRoom>) : RecyclerView.Adapter<ProductAdapter.UserViewHolder>() {
-    var listProducts: List<ProductRoom> = productList
+class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapter<ProductAdapter.UserViewHolder>() {
+    var listProducts: List<ProductWithImages> = productList
     lateinit var context: Context
 
-    fun setItemList(items: List<ProductRoom>) {
+    fun setItemList(items: List<ProductWithImages>) {
         this.listProducts = items
         notifyDataSetChanged()
     }
@@ -35,24 +38,24 @@ class ProductAdapter(productList: List<ProductRoom>) : RecyclerView.Adapter<Prod
 
     override fun onBindViewHolder(parent: UserViewHolder, position: Int) {
 
-        parent.name.text = let { listProducts.get(position).name}
-        parent.price.text = let { listProducts.get(position).price.toString() }
+        parent.name.text = let { listProducts.get(position).productRoom.name}
+        parent.price.text = let { listProducts.get(position).productRoom.price.toString()}
 
 
 
 
-//        var finalUrl: Any
-//        if(listProducts.isNotEmpty()) {
-//            var file: String = listProducts.items.get(position).media_gallery_entries.get(0).file
-//            finalUrl = "$imageBaseURL$file"
-//
-//        }else{
-//            finalUrl = R.drawable.no_image_available
-//        }
-//        Glide.with(context)
-//            .load(finalUrl)
-//            .error(R.drawable.no_image_available)
-//            .into(parent.imageView)
+        var finalUrl: Any
+        if(listProducts.get(position).images.size>0) {
+            var file: String = listProducts.get(position).images.get(0).pathImage
+            finalUrl = "$imageBaseURL$file"
+
+        }else{
+            finalUrl = R.drawable.no_image_available
+        }
+        Glide.with(context)
+            .load(finalUrl)
+            .error(R.drawable.no_image_available)
+            .into(parent.imageView)
 
 
 

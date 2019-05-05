@@ -7,15 +7,8 @@ import android.arch.persistence.room.ForeignKey.CASCADE
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(
-    tableName = "images",
-    foreignKeys = arrayOf(
-        ForeignKey(
-            entity = ProductRoom::class,
-            parentColumns = arrayOf("sku"),
-            childColumns = arrayOf("product_sku"),
-            onDelete = CASCADE
-        )
-    )
+    tableName = "images"
+
 )
 data class ImageRoom(
     @PrimaryKey(autoGenerate = true)

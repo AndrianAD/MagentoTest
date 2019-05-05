@@ -3,6 +3,7 @@ package com.example.magentotest
 import android.arch.persistence.room.*
 import com.example.magentotest.Room.Model.ImageRoom
 import com.example.magentotest.Room.Model.ProductRoom
+import com.example.magentotest.Room.Model.ProductWithImages
 
 @Dao
 interface ProductDAO {
@@ -20,6 +21,9 @@ interface ProductDAO {
     fun getAll(): List<ProductRoom>
 
     @Query("SELECT * FROM images WHERE product_sku = :sku")
-    fun getBySKU(sku: String): ProductRoom
+    fun getBySKU(sku: String): ImageRoom
+
+    @Query("Select * FROM products")
+    fun loadProductWithImages(): List<ProductWithImages>
 
 }

@@ -5,15 +5,20 @@ import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.util.Log
 import android.widget.Toast
 import com.example.magentotest.Adapter.ProductAdapter
 import com.example.magentotest.ProductViewModel
 import com.example.magentotest.R
 import com.example.magentotest.Room.Model.ProductRoom
+import com.example.magentotest.Room.Model.ProductWithImages
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class UserActivity : AppCompatActivity() {
 
@@ -31,7 +36,9 @@ class UserActivity : AppCompatActivity() {
         productViewModel.tokenLIVE.value = intent.getStringExtra("Token")
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-tv_title.setOnClickListener { productViewModel.saveImages(productViewModel.productsList) }
+
+tv_title.setOnClickListener {
+}
 
 
         tokenObserver = Observer {
@@ -49,9 +56,20 @@ tv_title.setOnClickListener { productViewModel.saveImages(productViewModel.produ
 
         listofProductsRoomObserver = Observer {
             if (it != null) {
+                var productWithImages: List<ProductWithImages> = listOf()
+                Observable.fromCallable {
+                    productWithImages = productViewModel.productDao.loadProductWithImages()
+                }
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribe {
+                        val productAdapter = ProductAdapter(productWithImages)
+                        recyclerView.adapter = productAdapter
+                    }
 
-                val productAdapter = ProductAdapter(it)
-                recyclerView.adapter = productAdapter
+
+
+
 
             }
         }
