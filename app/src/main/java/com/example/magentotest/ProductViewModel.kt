@@ -14,8 +14,6 @@ import kotlinx.coroutines.launch
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
 
-
-    private val TAG = javaClass.simpleName
     var tokenLIVE = MutableLiveData<String>()
     lateinit var productsList: ProductList
     var productsRoomLIVE = MutableLiveData<List<ProductRoom>>()
@@ -31,11 +29,9 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     }
 
 
-    fun gelAllProduct(type: String) {
-        android.util.Log.e(
-            "Magento", "getAllProduct, type: "
-                    + type + ", thread: " + Thread.currentThread().name
-        )
+    fun getAllProduct(type: String) {
+        Log.e("Magento", "getAllProduct, type: "
+                    + type + ", thread: " + Thread.currentThread().name)
         when (type) {
             "Retrofit" -> retrofitAPI.getAllProduct(this)
             "Room" -> roomAPI.getAllProduct(this)
@@ -55,7 +51,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
             for (item in listofProductRoom) {
                 insert(item)
             }
-            gelAllProduct("Room")
+            getAllProduct("Room")
         }
     }
 
@@ -70,14 +66,12 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                     Log.e("Magento", "saveImages" + "thread: " + Thread.currentThread().name)
                 }
             }
-
             GlobalScope.launch(Dispatchers.Default) {
                 for (item in listOfFoto) {
                     productDao.insertImage(item)
                 }
             }
         }
-
     }
 
 

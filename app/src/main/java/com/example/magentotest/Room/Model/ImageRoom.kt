@@ -7,9 +7,7 @@ import android.arch.persistence.room.ForeignKey.CASCADE
 import android.arch.persistence.room.PrimaryKey
 
 @Entity(
-    tableName = "images"
-
-)
+    tableName = "images")
 data class ImageRoom(
     @PrimaryKey(autoGenerate = true)
     var id: Int=0,

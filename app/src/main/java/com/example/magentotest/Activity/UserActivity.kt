@@ -2,16 +2,19 @@ package com.example.magentotest.Activity
 
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Toast
 import com.example.magentotest.Adapter.ProductAdapter
+import com.example.magentotest.App
 import com.example.magentotest.ProductViewModel
 import com.example.magentotest.R
 import com.example.magentotest.Room.Model.ProductRoom
-import com.example.magentotest.Room.Model.ProductWithImages
+import com.example.magentotest.Utils.toast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -28,7 +31,6 @@ class UserActivity : AppCompatActivity() {
     lateinit var tokenObserver: Observer<String>
     lateinit var listofProductsRoomObserver: Observer<List<ProductRoom>>
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
@@ -36,16 +38,22 @@ class UserActivity : AppCompatActivity() {
         productViewModel.tokenLIVE.value = intent.getStringExtra("Token")
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        swipe_refresh.setOnRefreshListener {
 
-tv_title.setOnClickListener {
-}
+            GlobalScope.launch(Dispatchers.Default) {
+                productViewModel.productDao.delleteAllImages()
+                productViewModel.productDao.delleteAllProducts()
+            }
+            productViewModel.getAllProduct("Retrofit")
+            swipe_refresh.isRefreshing = false
+        }
 
 
         tokenObserver = Observer {
 
             Observable.fromCallable {
-                productViewModel.gelAllProduct("Room")
-                productViewModel.gelAllProduct("Retrofit")
+                productViewModel.getAllProduct("Room")
+                productViewModel.getAllProduct("Retrofit")
             }
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -56,31 +64,38 @@ tv_title.setOnClickListener {
 
         listofProductsRoomObserver = Observer {
             if (it != null) {
-                var productWithImages: List<ProductWithImages> = listOf()
                 Observable.fromCallable {
-                    productWithImages = productViewModel.productDao.loadProductWithImages()
+                    App.productWithImages = productViewModel.productDao.loadProductWithImages()
                 }
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
-                        val productAdapter = ProductAdapter(productWithImages)
+                        val productAdapter = ProductAdapter(App.productWithImages)
                         recyclerView.adapter = productAdapter
                     }
-
-
-
-
-
             }
         }
-
-
-
         productViewModel.tokenLIVE.observe(this, tokenObserver)
         productViewModel.productsRoomLIVE.observe(this, listofProductsRoomObserver)
     }
 
 
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+
+        getMenuInflater().inflate(R.menu.main_menu, menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+
+        when (item!!.itemId) {
+
+            R.id.add_new ->  {var intent= Intent(this@UserActivity, UploadProductActivity::class.java)
+                    startActivity(intent)}
+        }
+        return super.onOptionsItemSelected(item)
+    }
 }
 
 

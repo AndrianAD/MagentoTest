@@ -1,6 +1,5 @@
 package com.example.magentotest.Adapter
 
-
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
@@ -10,7 +9,6 @@ import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.example.magentotest.Activity.DetailsActivity
 import com.example.magentotest.R
-import com.example.magentotest.Room.Model.ProductRoom
 import com.example.magentotest.Room.Model.ProductWithImages
 import com.example.magentotest.Utils.imageBaseURL
 import kotlinx.android.synthetic.main.recycler_view_element.view.*

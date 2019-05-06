@@ -26,4 +26,10 @@ interface ProductDAO {
     @Query("Select * FROM products")
     fun loadProductWithImages(): List<ProductWithImages>
 
+    @Query("DELETE FROM products")
+    fun delleteAllProducts()
+
+    @Query("DELETE FROM IMAGES")
+    fun delleteAllImages()
+
 }
