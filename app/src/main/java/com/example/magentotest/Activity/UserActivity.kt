@@ -36,6 +36,7 @@ class UserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user)
 
         productViewModel.tokenLIVE.value = intent.getStringExtra("Token")
+        App.token=intent.getStringExtra("Token")
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         swipe_refresh.setOnRefreshListener {
@@ -46,6 +47,7 @@ class UserActivity : AppCompatActivity() {
             }
             productViewModel.getAllProduct("Retrofit")
             swipe_refresh.isRefreshing = false
+
         }
 
 
@@ -63,6 +65,8 @@ class UserActivity : AppCompatActivity() {
         }
 
         listofProductsRoomObserver = Observer {
+            // TODO
+            Thread.sleep(300)
             if (it != null) {
                 Observable.fromCallable {
                     App.productWithImages = productViewModel.productDao.loadProductWithImages()
@@ -75,13 +79,13 @@ class UserActivity : AppCompatActivity() {
                     }
             }
         }
+
         productViewModel.tokenLIVE.observe(this, tokenObserver)
         productViewModel.productsRoomLIVE.observe(this, listofProductsRoomObserver)
     }
 
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-
         getMenuInflater().inflate(R.menu.main_menu, menu)
         return super.onCreateOptionsMenu(menu)
     }
@@ -97,6 +101,25 @@ class UserActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 //        retrofit!!.getProductbySKU("cat", "Bearer $token").enqueue(object : Callback<Product> {

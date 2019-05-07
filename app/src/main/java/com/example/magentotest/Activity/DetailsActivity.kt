@@ -1,5 +1,6 @@
 package com.example.magentotest.Activity
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -14,24 +15,32 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        var products=App.productWithImages
+        var products = App.productWithImages
         var position = intent.getStringExtra("position").toInt()
         tv_name_details.text = products.get(position).productRoom.name
-        tv_price_details.text= products.get(position).productRoom.price.toString()
+        tv_price_details.text = products.get(position).productRoom.price.toString()
 
 
         var finalUrl: Any
-        if(products.get(position).images.size>0) {
+        if (products.get(position).images.size > 0) {
             var file: String = products.get(position).images.get(0).pathImage
             finalUrl = "$imageBaseURL$file"
 
-        }else{
+        } else {
             finalUrl = R.drawable.no_image_available
         }
         Glide.with(applicationContext)
             .load(finalUrl)
             .error(R.drawable.no_image_available)
             .into(imageView_details)
+
+
+        button_edit.setOnClickListener {
+            var intent = Intent(this@DetailsActivity, UploadProductActivity::class.java)
+            intent.putExtra("position", position.toString())
+            startActivity(intent)
+        }
+
 
     }
 }

@@ -3,6 +3,7 @@ package com.example.magentotest
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import android.content.Intent
 import android.util.Log
 import com.example.magentotest.Room.Model.ImageRoom
 import com.example.magentotest.Room.Model.ProductRoom
@@ -20,7 +21,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private var retrofitAPI: RetrofitAPI = RetrofitAPI()
     private var roomAPI: RoomAPI = RoomAPI()
 
-    var productDB: ProductsRoomDatabase
+    private var productDB: ProductsRoomDatabase
     var productDao: ProductDAO
 
     init {
@@ -39,23 +40,23 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     }
 
 
-    fun insert(productRoom: ProductRoom) {
+    fun insertProductToDB(productRoom: ProductRoom) {
         productDao.insert(productRoom)
     }
 
-    fun saveToDb() {
+    fun saveProductToDb() {
         Log.e("Magento", "saveToDB, " + ", thread: " + Thread.currentThread().name)
         var listofProductRoom = convertProductsToProductsRoom(productsList)
-        saveImages(productsList)
+        saveImagesToDB(productsList)
         GlobalScope.launch(Dispatchers.Default) {
             for (item in listofProductRoom) {
-                insert(item)
+                insertProductToDB(item)
             }
             getAllProduct("Room")
         }
     }
 
-    fun saveImages(products: ProductList) {
+    fun saveImagesToDB(products: ProductList) {
 
         if (products.items.isNotEmpty()) {
             val listOfFoto: ArrayList<ImageRoom> = ArrayList()
@@ -63,7 +64,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
                 if (product.media_gallery_entries.isNotEmpty()) {
                     for (item in product.media_gallery_entries)
                         listOfFoto.add(ImageRoom(0, item.file, product.sku))
-                    Log.e("Magento", "saveImages" + "thread: " + Thread.currentThread().name)
+                    Log.e("Magento", "saveImagesToDB" + "thread: " + Thread.currentThread().name)
                 }
             }
             GlobalScope.launch(Dispatchers.Default) {
@@ -83,8 +84,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         return listofProductRoom
     }
 
-
     override fun onCleared() {
         super.onCleared()
     }
+
+
+
 }

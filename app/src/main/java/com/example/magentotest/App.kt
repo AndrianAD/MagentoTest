@@ -11,6 +11,7 @@ class App: Application() {
 
     companion object {
         var productWithImages: List<ProductWithImages> = listOf()
+        lateinit var token:String
     }
 
     override fun onCreate() {
