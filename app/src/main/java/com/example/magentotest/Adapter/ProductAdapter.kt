@@ -39,9 +39,6 @@ class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapte
         parent.name.text = let { listProducts.get(position).productRoom.name}
         parent.price.text = let { listProducts.get(position).productRoom.price.toString()}
 
-
-
-
         var finalUrl: Any
         if(listProducts.get(position).images.size>0) {
             var file: String = listProducts.get(position).images.get(0).pathImage

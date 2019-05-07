@@ -3,8 +3,8 @@ package com.example.magentotest
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import android.content.Intent
 import android.util.Log
+import com.example.magentotest.Retrofit.RetrofitFactory
 import com.example.magentotest.Room.Model.ImageRoom
 import com.example.magentotest.Room.Model.ProductRoom
 import com.example.magentotest.data.Product.Product
@@ -23,6 +23,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     private var productDB: ProductsRoomDatabase
     var productDao: ProductDAO
+    val retrofit = RetrofitFactory.retrofitInstance
 
     init {
         productDB = ProductsRoomDatabase.getInstance(application)!!
@@ -47,7 +48,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     fun saveProductToDb() {
         Log.e("Magento", "saveToDB, " + ", thread: " + Thread.currentThread().name)
         var listofProductRoom = convertProductsToProductsRoom(productsList)
-        saveImagesToDB(productsList)
+        roomAPI.insertImage(this)
         GlobalScope.launch(Dispatchers.Default) {
             for (item in listofProductRoom) {
                 insertProductToDB(item)
@@ -56,24 +57,24 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-    fun saveImagesToDB(products: ProductList) {
-
-        if (products.items.isNotEmpty()) {
-            val listOfFoto: ArrayList<ImageRoom> = ArrayList()
-            for (product in products.items) {
-                if (product.media_gallery_entries.isNotEmpty()) {
-                    for (item in product.media_gallery_entries)
-                        listOfFoto.add(ImageRoom(0, item.file, product.sku))
-                    Log.e("Magento", "saveImagesToDB" + "thread: " + Thread.currentThread().name)
-                }
-            }
-            GlobalScope.launch(Dispatchers.Default) {
-                for (item in listOfFoto) {
-                    productDao.insertImage(item)
-                }
-            }
-        }
-    }
+//    fun insertImagesToDB(products: ProductList) {
+//
+//        if (products.items.isNotEmpty()) {
+//            val listOfFoto: ArrayList<ImageRoom> = ArrayList()
+//            for (product in products.items) {
+//                if (product.media_gallery_entries.isNotEmpty()) {
+//                    for (item in product.media_gallery_entries)
+//                        listOfFoto.add(ImageRoom(0, item.file, product.sku))
+//                    Log.e("Magento", "insertImagesToDB" + "thread: " + Thread.currentThread().name)
+//                }
+//            }
+//            GlobalScope.launch(Dispatchers.Default) {
+//                for (item in listOfFoto) {
+//                    productDao.insertImage(item)
+//                }
+//            }
+//        }
+//    }
 
 
     fun convertProductsToProductsRoom(productList: ProductList): ArrayList<ProductRoom> {

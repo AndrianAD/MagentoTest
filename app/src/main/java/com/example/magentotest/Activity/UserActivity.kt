@@ -14,7 +14,6 @@ import com.example.magentotest.App
 import com.example.magentotest.ProductViewModel
 import com.example.magentotest.R
 import com.example.magentotest.Room.Model.ProductRoom
-import com.example.magentotest.Utils.toast
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -36,7 +35,7 @@ class UserActivity : AppCompatActivity() {
         setContentView(R.layout.activity_user)
 
         productViewModel.tokenLIVE.value = intent.getStringExtra("Token")
-        App.token=intent.getStringExtra("Token")
+        App.token = intent.getStringExtra("Token")
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         swipe_refresh.setOnRefreshListener {
@@ -64,9 +63,13 @@ class UserActivity : AppCompatActivity() {
                 }
         }
 
+
+        val productAdapter = ProductAdapter(listOf())
+        recyclerView.adapter = productAdapter
+
         listofProductsRoomObserver = Observer {
             // TODO
-            Thread.sleep(300)
+            Thread.sleep(100)
             if (it != null) {
                 Observable.fromCallable {
                     App.productWithImages = productViewModel.productDao.loadProductWithImages()
@@ -74,8 +77,8 @@ class UserActivity : AppCompatActivity() {
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
                     .subscribe {
-                        val productAdapter = ProductAdapter(App.productWithImages)
-                        recyclerView.adapter = productAdapter
+                        productAdapter.listProducts = App.productWithImages
+                        productAdapter.notifyDataSetChanged()
                     }
             }
         }
@@ -95,31 +98,14 @@ class UserActivity : AppCompatActivity() {
 
         when (item!!.itemId) {
 
-            R.id.add_new ->  {var intent= Intent(this@UserActivity, UploadProductActivity::class.java)
-                    startActivity(intent)}
+            R.id.add_new -> {
+                var intent = Intent(this@UserActivity, UploadProductActivity::class.java)
+                startActivity(intent)
+            }
         }
         return super.onOptionsItemSelected(item)
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 //        retrofit!!.getProductbySKU("cat", "Bearer $token").enqueue(object : Callback<Product> {

@@ -1,35 +1,30 @@
 package com.example.magentotest.Activity
 
 import android.app.Activity
+import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Bitmap
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
-import android.util.Log
 import com.example.magentotest.App
-import com.example.magentotest.Retrofit.RetrofitFactory
-import com.example.magentotest.Utils.toast
-import com.example.magentotest.data.ImageForAdding.Content
-import com.example.magentotest.data.ImageForAdding.Entry
-import com.example.magentotest.data.ImageForAdding.ImageForAdding
-import com.example.magentotest.data.Product.ProductList
+import com.example.magentotest.UploadProductViewModel
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
-import com.example.magentotest.data.ProductForAdding.ProductPojo
 import kotlinx.android.synthetic.main.activity_upload_product.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
-import java.util.*
 
 
 class UploadProductActivity : AppCompatActivity() {
-    var selectedImage: String = ""
-    var position :Int=0
+
+    val uploadProductViewModel: UploadProductViewModel by lazy {
+        ViewModelProviders.of(this).get(UploadProductViewModel::class.java)
+    }
+    var selectedImage: String? = null
+    var position: Int = 0
+    var isEditind: Boolean?=null
 
     private val PICK_IMAGE = 1
 
@@ -37,7 +32,6 @@ class UploadProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.magentotest.R.layout.activity_upload_product)
 
-        val retrofit = RetrofitFactory.retrofitInstance
 
         var products = App.productWithImages
 
@@ -54,42 +48,16 @@ class UploadProductActivity : AppCompatActivity() {
                 name = et_name.text.toString(),
                 price = et_price.text.toString().toInt(),
                 sku = et_name.text.toString(),
-                weight = Random().nextInt(100)
+                weight = 20
             )
 
-
-            retrofit!!.addProduct(ProductPojo(product), "Bearer ${App.token}")
-                .enqueue(object : Callback<ProductList> {
-                    override fun onFailure(call: Call<ProductList>, t: Throwable) {
-                        Log.e("retrofit", t.message)
-                        toast("Error add Product")
-                    }
-
-                    override fun onResponse(call: Call<ProductList>, response: Response<ProductList>) {
-                        Log.e("retrofit", response.body().toString())
-                        finish()
-                    }
-                })
-
-            var image = ImageForAdding(Entry(content = Content(selectedImage, "firstImage")))
-
-            retrofit!!.addImage(product.sku, image, "Bearer ${App.token}").enqueue(object : Callback<Int> {
-                override fun onFailure(call: Call<Int>, t: Throwable) {
-                    Log.e("retrofit", t.message)
-                    toast("Error add Image")
-                }
-
-                override fun onResponse(call: Call<Int>, response: Response<Int>) {
-                    Log.e("retrofit", response.body().toString())
-                    finish()
-                }
-            })
-
+            if (!selectedImage.isNullOrEmpty()) {
+                uploadProductViewModel.insertProduct(product, selectedImage!!)
+            }
         }
 
 
         button_attach.setOnClickListener {
-
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT

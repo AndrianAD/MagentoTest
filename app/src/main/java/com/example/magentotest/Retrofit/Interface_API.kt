@@ -1,4 +1,5 @@
 package com.example.magentotest.Retrofit
+
 import com.example.magentotest.data.Credentials
 import com.example.magentotest.data.ImageForAdding.ImageForAdding
 import com.example.magentotest.data.Product.Product
@@ -25,6 +26,10 @@ interface Interface_API {
     @POST("rest/V1/products/")
     @Headers("Content-Type: application/json")
     fun addProduct(@Body productPojo: ProductPojo, @Header("Authorization") token: String): Call<ProductList>
+
+    @PUT("rest/V1/products/{sku}")
+    @Headers("Content-Type: application/json")
+    fun updateProduct(@Path("productSKU") productSKU: String, @Body productPojo: ProductPojo, @Header("Authorization") token: String): Call<ProductList>
 
 
     @POST("rest/V1/products/{productSKU}/media")
