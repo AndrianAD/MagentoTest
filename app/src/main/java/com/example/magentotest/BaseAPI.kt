@@ -5,16 +5,13 @@ import com.example.magentotest.data.ProductForAdding.ProductForAdding
 
 interface BaseAPI {
 
-    fun updateProduct(
-        viewModel: MutableLiveData<Boolean>,
-        sku:String,
-        product: ProductForAdding, selectedImage: String)
+    fun updateProduct(viewModel: MutableLiveData<Boolean>, sku:String, product: ProductForAdding, selectedImage: String)
 
     fun getAllProduct(viewModel: ProductViewModel)
 
     fun insertImage(viewModel: ProductViewModel)
 
-    fun insertProduct(product: ProductForAdding, selectedImage: String)
+    fun insertProduct(viewModel: MutableLiveData<Boolean>,product: ProductForAdding, selectedImage: String)
 
 
 }

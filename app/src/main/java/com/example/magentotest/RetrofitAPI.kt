@@ -44,7 +44,7 @@ class RetrofitAPI : BaseAPI {
             })
     }
 
-    override fun insertProduct(product: ProductForAdding, selectedImage: String) {
+    override fun insertProduct(livedata: MutableLiveData<Boolean>,product: ProductForAdding, selectedImage: String) {
 
         retrofit!!.addProduct(ProductPojo(product), "Bearer ${App.token}")
             .enqueue(object : Callback<ProductList> {
@@ -63,6 +63,7 @@ class RetrofitAPI : BaseAPI {
                         }
                         override fun onResponse(call: Call<Int>, response: Response<Int>) {
                             Log.e("retrofit", response.body().toString())
+                            livedata.postValue(true)
                         }
                     }
                     )
@@ -77,7 +78,7 @@ class RetrofitAPI : BaseAPI {
 
     override fun getAllProduct(viewModel: ProductViewModel) {
 
-        retrofit!!.getAllProducts(1, "Bearer ${viewModel.tokenLIVE.value}")
+        retrofit!!.getAllProducts(1, "Bearer ${App.token}")
             .enqueue(object : Callback<ProductList> {
 
                 override fun onFailure(call: Call<ProductList>, t: Throwable) {

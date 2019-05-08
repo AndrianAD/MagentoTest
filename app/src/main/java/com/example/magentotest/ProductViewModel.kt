@@ -4,10 +4,7 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
-import com.example.magentotest.Retrofit.RetrofitFactory
-import com.example.magentotest.Room.Model.ImageRoom
 import com.example.magentotest.Room.Model.ProductRoom
-import com.example.magentotest.Room.Model.ProductWithImages
 import com.example.magentotest.data.Product.Product
 import com.example.magentotest.data.Product.ProductList
 import kotlinx.coroutines.Dispatchers
@@ -16,21 +13,17 @@ import kotlinx.coroutines.launch
 
 class ProductViewModel(application: Application) : AndroidViewModel(application) {
 
-    var tokenLIVE = MutableLiveData<String>()
     lateinit var productsList: ProductList
     var productWithImage = MutableLiveData<Boolean>()
     private var retrofitAPI: RetrofitAPI = RetrofitAPI()
     private var roomAPI: RoomAPI = RoomAPI()
-
     private var productDB: ProductsRoomDatabase
     var productDao: ProductDAO
-    val retrofit = RetrofitFactory.retrofitInstance
 
     init {
         productDB = ProductsRoomDatabase.getInstance(application)!!
         productDao = productDB.userDao()
     }
-
 
     fun getAllProduct(type: String) {
         Log.i("Magento", "getAllProduct, type: "
@@ -41,27 +34,20 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-
-    fun insertProductToDB(productRoom: ProductRoom) {
-        productDao.insert(productRoom)
-    }
-
     fun saveProductToDb() {
         Log.e("Magento", "saveToDB, " + ", thread: " + Thread.currentThread().name)
-        var listofProductRoom = convertProductsToProductsRoom(productsList)
+        val listofProductRoom = convertProductsToProductsRoom(productsList)
         roomAPI.insertImage(this)
         GlobalScope.launch(Dispatchers.Default) {
             for (item in listofProductRoom) {
-                insertProductToDB(item)
+                productDao.insert(item)
             }
             getAllProduct("Room")
         }
     }
 
-
-
     fun convertProductsToProductsRoom(productList: ProductList): ArrayList<ProductRoom> {
-        var listofProductRoom = ArrayList<ProductRoom>()
+        val listofProductRoom = ArrayList<ProductRoom>()
         for (item: Product in productList.items) {
             listofProductRoom.add(ProductRoom(item))
         }
@@ -71,7 +57,5 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     override fun onCleared() {
         super.onCleared()
     }
-
-
 
 }

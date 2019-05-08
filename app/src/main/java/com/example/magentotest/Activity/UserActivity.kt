@@ -8,47 +8,36 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
-import android.widget.Toast
 import com.example.magentotest.Adapter.ProductAdapter
 import com.example.magentotest.App
 import com.example.magentotest.ProductViewModel
 import com.example.magentotest.R
-import io.reactivex.Observable
-import io.reactivex.android.schedulers.AndroidSchedulers
-import io.reactivex.schedulers.Schedulers
 import kotlinx.android.synthetic.main.activity_user.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 class UserActivity : AppCompatActivity() {
 
     private val productViewModel: ProductViewModel by lazy {
         ViewModelProviders.of(this).get(ProductViewModel::class.java)
     }
-    lateinit var tokenObserver: Observer<String>
     lateinit var listofProductsObserver: Observer<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
 
-        productViewModel.tokenLIVE.value = intent.getStringExtra("Token")
+
         App.token = intent.getStringExtra("Token")
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        productViewModel.getAllProduct("Room")
+        productViewModel.getAllProduct("Retrofit")
+
         swipe_refresh.setOnRefreshListener {
-                productViewModel.productDao.delleteAllImages()
-                productViewModel.productDao.delleteAllProducts()
+            productViewModel.productDao.delleteAllImages()
+            productViewModel.productDao.delleteAllProducts()
             productViewModel.getAllProduct("Retrofit")
             swipe_refresh.isRefreshing = false
 
-        }
-
-
-        tokenObserver = Observer {
-                productViewModel.getAllProduct("Room")
-                productViewModel.getAllProduct("Retrofit")
         }
 
         val productAdapter = ProductAdapter(listOf())
@@ -60,8 +49,6 @@ class UserActivity : AppCompatActivity() {
             }
 
         }
-
-        productViewModel.tokenLIVE.observe(this, tokenObserver)
         productViewModel.productWithImage.observe(this, listofProductsObserver)
     }
 

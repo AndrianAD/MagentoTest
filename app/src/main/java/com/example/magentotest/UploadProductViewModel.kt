@@ -10,6 +10,7 @@ class UploadProductViewModel(application: Application) : AndroidViewModel(applic
     private var retrofitAPI: RetrofitAPI = RetrofitAPI()
     private var roomAPI: RoomAPI = RoomAPI()
     var callbackUpdateLivedata = MutableLiveData<Boolean>()
+    var callbackInsertLivedata = MutableLiveData<Boolean>()
 
     private var productDB: ProductsRoomDatabase
     var productDao: ProductDAO
@@ -19,8 +20,8 @@ class UploadProductViewModel(application: Application) : AndroidViewModel(applic
         productDao = productDB.userDao()
     }
 
-    fun insertProduct(product: ProductForAdding, selectedImage: String) {
-        retrofitAPI.insertProduct(product, selectedImage)
+    fun insertProduct(livedata: MutableLiveData<Boolean>,product: ProductForAdding, selectedImage: String) {
+        retrofitAPI.insertProduct(livedata,product, selectedImage)
     }
 
 

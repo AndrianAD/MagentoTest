@@ -30,6 +30,7 @@ class UploadProductActivity : AppCompatActivity() {
     lateinit var productDao: ProductDAO
     var sku: String = ""
     lateinit var callbackUpdateObserver: Observer<Boolean>
+    lateinit var callbackInsertObserver: Observer<Boolean>
 
     private val PICK_IMAGE = 1
 
@@ -60,23 +61,18 @@ class UploadProductActivity : AppCompatActivity() {
                     weight = 20
                 )
                 if (!selectedImage.isNullOrEmpty()) {
-                    uploadProductViewModel.updateProduct(
-                        uploadProductViewModel.callbackUpdateLivedata,
-                        sku,
-                        product,
-                        selectedImage!!
-                    )
+                    uploadProductViewModel.updateProduct(uploadProductViewModel.callbackUpdateLivedata, sku, product, selectedImage!!)
                 }
             } else {
 
-                var product = ProductForAdding(
+                val product = ProductForAdding(
                     name = et_name.text.toString(),
                     price = et_price.text.toString().toInt(),
                     sku = et_name.text.toString(),
                     weight = 20
                 )
                 if (!selectedImage.isNullOrEmpty()) {
-                    uploadProductViewModel.insertProduct(product, selectedImage!!)
+                    uploadProductViewModel.insertProduct(uploadProductViewModel.callbackInsertLivedata,product, selectedImage!!)
                 }
             }
         }
@@ -86,8 +82,14 @@ class UploadProductActivity : AppCompatActivity() {
                 finish()
         }
 
+        callbackInsertObserver = Observer {
+            if (it==true)
+                finish()
+        }
+
 
         uploadProductViewModel.callbackUpdateLivedata.observe(this,callbackUpdateObserver)
+        uploadProductViewModel.callbackInsertLivedata.observe(this,callbackInsertObserver)
 
         button_attach.setOnClickListener {
 

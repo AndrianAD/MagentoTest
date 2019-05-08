@@ -6,13 +6,9 @@ import com.example.magentotest.Room.Model.ImageRoom
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 
 class RoomAPI : BaseAPI {
-    override fun updateProduct(viewModel: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String) {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
-    }
+    override fun updateProduct(viewModel: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String) {}
 
-    override fun insertProduct(product: ProductForAdding, selectedImage: String) {
-
-    }
+    override fun insertProduct(viewModel: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String) {}
 
     override fun insertImage(viewModel: ProductViewModel) {
 
