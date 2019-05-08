@@ -1,6 +1,7 @@
 package com.example.magentotest.Activity
 
 import android.app.Activity
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.graphics.Bitmap
@@ -8,7 +9,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
-import com.example.magentotest.App
+import com.example.magentotest.ProductDAO
+import com.example.magentotest.ProductsRoomDatabase
 import com.example.magentotest.UploadProductViewModel
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 import kotlinx.android.synthetic.main.activity_upload_product.*
@@ -23,8 +25,11 @@ class UploadProductActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(UploadProductViewModel::class.java)
     }
     var selectedImage: String? = null
-    var position: Int = 0
-    var isEditind: Boolean?=null
+    var isEditind: Boolean = false
+    lateinit var productDB: ProductsRoomDatabase
+    lateinit var productDao: ProductDAO
+    var sku: String = ""
+    lateinit var callbackUpdateObserver: Observer<Boolean>
 
     private val PICK_IMAGE = 1
 
@@ -32,32 +37,60 @@ class UploadProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(com.example.magentotest.R.layout.activity_upload_product)
 
+        productDB = ProductsRoomDatabase.getInstance(this)!!
+        productDao = productDB.userDao()
 
-        var products = App.productWithImages
+        isEditind = intent.hasExtra(DetailsActivity.EXTRA_PRODUCT_SKU)
 
-        if (intent.hasExtra("position")) {
-            position = intent.getStringExtra("position").toInt()
-            et_name.setText(products.get(position).productRoom.name)
-            et_price.setText(products.get(position).productRoom.price.toString())
+        if (isEditind == true) {
+
+            sku = intent.getStringExtra(DetailsActivity.EXTRA_PRODUCT_SKU)
+            val productWithImage = productDao.getProductWithImagesbySKU(sku)
+            et_name.setText(productWithImage.productRoom.name)
+            et_price.setText(productWithImage.productRoom.price.toString())
+
         }
 
-
         button_OK.setOnClickListener {
+            if (isEditind == true) {
+                val product = ProductForAdding(
+                    name = et_name.text.toString(),
+                    price = et_price.text.toString().toInt(),
+                    sku = et_name.text.toString(),
+                    weight = 20
+                )
+                if (!selectedImage.isNullOrEmpty()) {
+                    uploadProductViewModel.updateProduct(
+                        uploadProductViewModel.callbackUpdateLivedata,
+                        sku,
+                        product,
+                        selectedImage!!
+                    )
+                }
+            } else {
 
-            var product = ProductForAdding(
-                name = et_name.text.toString(),
-                price = et_price.text.toString().toInt(),
-                sku = et_name.text.toString(),
-                weight = 20
-            )
-
-            if (!selectedImage.isNullOrEmpty()) {
-                uploadProductViewModel.insertProduct(product, selectedImage!!)
+                var product = ProductForAdding(
+                    name = et_name.text.toString(),
+                    price = et_price.text.toString().toInt(),
+                    sku = et_name.text.toString(),
+                    weight = 20
+                )
+                if (!selectedImage.isNullOrEmpty()) {
+                    uploadProductViewModel.insertProduct(product, selectedImage!!)
+                }
             }
         }
 
+        callbackUpdateObserver = Observer {
+            if (it==true)
+                finish()
+        }
+
+
+        uploadProductViewModel.callbackUpdateLivedata.observe(this,callbackUpdateObserver)
 
         button_attach.setOnClickListener {
+
             val intent = Intent()
             intent.type = "image/*"
             intent.action = Intent.ACTION_GET_CONTENT

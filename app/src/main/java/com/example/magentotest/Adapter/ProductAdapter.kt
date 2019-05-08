@@ -3,6 +3,7 @@ package com.example.magentotest.Adapter
 import android.content.Context
 import android.content.Intent
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +48,7 @@ class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapte
         }else{
             finalUrl = R.drawable.no_image_available
         }
+        Log.i("Image","$finalUrl")
         Glide.with(context)
             .load(finalUrl)
             .error(R.drawable.no_image_available)
@@ -56,14 +58,9 @@ class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapte
 
         parent.itemView.setOnClickListener {
             val intent = Intent(context, DetailsActivity::class.java)
-            intent.putExtra("position", position.toString())
+            intent.putExtra(DetailsActivity.EXTRA_PRODUCT_SKU, listProducts.get(position).productRoom.sku)
             context.startActivity(intent)
         }
-
-//        fun getListOfAllImageFromProductRoom(value: ProductRoom): List<String>{
-//            return value.image.split("!").toMutableList()
-//        }
-
     }
 
 

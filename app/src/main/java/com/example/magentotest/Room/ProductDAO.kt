@@ -14,14 +14,14 @@ interface ProductDAO {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertImage(image: ImageRoom)
 
-    @Delete
-    fun delete(product: ProductRoom)
-
     @Query("SELECT * FROM products")
-    fun getAll(): List<ProductRoom>
+    fun getAllProductRoom(): List<ProductRoom>
 
     @Query("SELECT * FROM images WHERE product_sku = :sku")
-    fun getBySKU(sku: String): ImageRoom
+    fun getImagesBySKU(sku: String): ImageRoom
+
+    @Query("Select * FROM products WHERE sku = :sku")
+    fun getProductWithImagesbySKU(sku: String): ProductWithImages
 
     @Query("Select * FROM products")
     fun loadProductWithImages(): List<ProductWithImages>

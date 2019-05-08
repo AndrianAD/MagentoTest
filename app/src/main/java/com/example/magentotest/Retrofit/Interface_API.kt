@@ -27,7 +27,7 @@ interface Interface_API {
     @Headers("Content-Type: application/json")
     fun addProduct(@Body productPojo: ProductPojo, @Header("Authorization") token: String): Call<ProductList>
 
-    @PUT("rest/V1/products/{sku}")
+    @PUT("rest/V1/products/{productSKU}")
     @Headers("Content-Type: application/json")
     fun updateProduct(@Path("productSKU") productSKU: String, @Body productPojo: ProductPojo, @Header("Authorization") token: String): Call<ProductList>
 

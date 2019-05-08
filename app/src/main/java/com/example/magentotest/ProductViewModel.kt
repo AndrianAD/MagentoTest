@@ -7,6 +7,7 @@ import android.util.Log
 import com.example.magentotest.Retrofit.RetrofitFactory
 import com.example.magentotest.Room.Model.ImageRoom
 import com.example.magentotest.Room.Model.ProductRoom
+import com.example.magentotest.Room.Model.ProductWithImages
 import com.example.magentotest.data.Product.Product
 import com.example.magentotest.data.Product.ProductList
 import kotlinx.coroutines.Dispatchers
@@ -17,7 +18,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
     var tokenLIVE = MutableLiveData<String>()
     lateinit var productsList: ProductList
-    var productsRoomLIVE = MutableLiveData<List<ProductRoom>>()
+    var productWithImage = MutableLiveData<Boolean>()
     private var retrofitAPI: RetrofitAPI = RetrofitAPI()
     private var roomAPI: RoomAPI = RoomAPI()
 
@@ -32,7 +33,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
 
 
     fun getAllProduct(type: String) {
-        Log.e("Magento", "getAllProduct, type: "
+        Log.i("Magento", "getAllProduct, type: "
                     + type + ", thread: " + Thread.currentThread().name)
         when (type) {
             "Retrofit" -> retrofitAPI.getAllProduct(this)
@@ -57,24 +58,6 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
         }
     }
 
-//    fun insertImagesToDB(products: ProductList) {
-//
-//        if (products.items.isNotEmpty()) {
-//            val listOfFoto: ArrayList<ImageRoom> = ArrayList()
-//            for (product in products.items) {
-//                if (product.media_gallery_entries.isNotEmpty()) {
-//                    for (item in product.media_gallery_entries)
-//                        listOfFoto.add(ImageRoom(0, item.file, product.sku))
-//                    Log.e("Magento", "insertImagesToDB" + "thread: " + Thread.currentThread().name)
-//                }
-//            }
-//            GlobalScope.launch(Dispatchers.Default) {
-//                for (item in listOfFoto) {
-//                    productDao.insertImage(item)
-//                }
-//            }
-//        }
-//    }
 
 
     fun convertProductsToProductsRoom(productList: ProductList): ArrayList<ProductRoom> {

@@ -1,5 +1,6 @@
 package com.example.magentotest
 
+import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.example.magentotest.Retrofit.RetrofitFactory
 import com.example.magentotest.data.ImageForAdding.Content
@@ -14,8 +15,34 @@ import retrofit2.Response
 
 
 class RetrofitAPI : BaseAPI {
+
     var retrofit = RetrofitFactory.retrofitInstance
 
+    override fun updateProduct(livedata: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String) {
+        retrofit!!.updateProduct(sku, ProductPojo(product), "Bearer ${App.token}")
+            .enqueue(object : Callback<ProductList> {
+                override fun onFailure(call: Call<ProductList>, t: Throwable) {
+                    Log.e("retrofit", t.message)
+                }
+
+                override fun onResponse(call: Call<ProductList>, response: Response<ProductList>) {
+                    Log.i("retrofit", response.body().toString())
+                    var image = ImageForAdding(Entry(content = Content(selectedImage, product.name + "foto")))
+                    retrofit!!.addImage(sku, image, "Bearer ${App.token}").enqueue(object : Callback<Int> {
+                        override fun onFailure(call: Call<Int>, t: Throwable) {
+                            Log.e("retrofit", t.message)
+                        }
+                        override fun onResponse(call: Call<Int>, response: Response<Int>) {
+                            Log.i("retrofit", response.body().toString())
+                            livedata.postValue(true)
+
+                        }
+                    }
+                    )
+                }
+
+            })
+    }
 
     override fun insertProduct(product: ProductForAdding, selectedImage: String) {
 
@@ -25,21 +52,20 @@ class RetrofitAPI : BaseAPI {
                     Log.e("retrofit", t.message)
 
                 }
-
                 override fun onResponse(call: Call<ProductList>, response: Response<ProductList>) {
-                    Log.e("retrofit", response.body().toString())
+                    Log.i("retrofit", response.body().toString())
 
                     var image = ImageForAdding(Entry(content = Content(selectedImage, product.name + "foto")))
 
                     retrofit!!.addImage(product.sku, image, "Bearer ${App.token}").enqueue(object : Callback<Int> {
                         override fun onFailure(call: Call<Int>, t: Throwable) {
                             Log.e("retrofit", t.message)
-
                         }
                         override fun onResponse(call: Call<Int>, response: Response<Int>) {
                             Log.e("retrofit", response.body().toString())
                         }
-                    })
+                    }
+                    )
                 }
             })
     }

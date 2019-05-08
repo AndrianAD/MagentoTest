@@ -20,7 +20,7 @@ abstract class ProductsRoomDatabase : RoomDatabase() {
                 synchronized(ProductsRoomDatabase::class) {
                     INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                         ProductsRoomDatabase::class.java, "MagentoDataBase.db")
-                        //  .allowMainThreadQueries()         // в основном потоке
+                          .allowMainThreadQueries()         // в основном потоке
                         .build()
                 }
             }

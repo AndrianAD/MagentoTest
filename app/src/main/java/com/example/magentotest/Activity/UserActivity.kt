@@ -13,7 +13,6 @@ import com.example.magentotest.Adapter.ProductAdapter
 import com.example.magentotest.App
 import com.example.magentotest.ProductViewModel
 import com.example.magentotest.R
-import com.example.magentotest.Room.Model.ProductRoom
 import io.reactivex.Observable
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
@@ -28,7 +27,7 @@ class UserActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(ProductViewModel::class.java)
     }
     lateinit var tokenObserver: Observer<String>
-    lateinit var listofProductsRoomObserver: Observer<List<ProductRoom>>
+    lateinit var listofProductsObserver: Observer<Boolean>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -39,11 +38,8 @@ class UserActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         swipe_refresh.setOnRefreshListener {
-
-            GlobalScope.launch(Dispatchers.Default) {
                 productViewModel.productDao.delleteAllImages()
                 productViewModel.productDao.delleteAllProducts()
-            }
             productViewModel.getAllProduct("Retrofit")
             swipe_refresh.isRefreshing = false
 
@@ -51,42 +47,23 @@ class UserActivity : AppCompatActivity() {
 
 
         tokenObserver = Observer {
-
-            Observable.fromCallable {
                 productViewModel.getAllProduct("Room")
                 productViewModel.getAllProduct("Retrofit")
-            }
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe {
-                    Toast.makeText(this, "WELCOME", Toast.LENGTH_LONG).show()
-                }
         }
-
 
         val productAdapter = ProductAdapter(listOf())
         recyclerView.adapter = productAdapter
 
-        listofProductsRoomObserver = Observer {
-            // TODO
-            Thread.sleep(100)
+        listofProductsObserver = Observer {
             if (it != null) {
-                Observable.fromCallable {
-                    App.productWithImages = productViewModel.productDao.loadProductWithImages()
-                }
-                    .subscribeOn(Schedulers.io())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe {
-                        productAdapter.listProducts = App.productWithImages
-                        productAdapter.notifyDataSetChanged()
-                    }
+                productAdapter.setItemList(App.productWithImages)
             }
+
         }
 
         productViewModel.tokenLIVE.observe(this, tokenObserver)
-        productViewModel.productsRoomLIVE.observe(this, listofProductsRoomObserver)
+        productViewModel.productWithImage.observe(this, listofProductsObserver)
     }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.main_menu, menu)
@@ -106,18 +83,3 @@ class UserActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 }
-
-
-//        retrofit!!.getProductbySKU("cat", "Bearer $token").enqueue(object : Callback<Product> {
-//
-//            override fun onFailure(call: Call<Product>, t: Throwable) {
-//                Log.v("retrofit", "Erorr $t.message")
-//            }
-//
-//            override fun onResponse(call: Call<Product>, response: Response<Product>) {
-//                Log.v("retrofit", response.message())
-//                var product : Product? = response.body()
-//                price.text=product!!.price.toString()
-//                name.text=product!!.name
-//            }
-//        })

@@ -1,12 +1,14 @@
 package com.example.magentotest
 
-import android.arch.lifecycle.ViewModel
-import android.content.Context
+import android.arch.lifecycle.MutableLiveData
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 
 interface BaseAPI {
 
-
+    fun updateProduct(
+        viewModel: MutableLiveData<Boolean>,
+        sku:String,
+        product: ProductForAdding, selectedImage: String)
 
     fun getAllProduct(viewModel: ProductViewModel)
 
