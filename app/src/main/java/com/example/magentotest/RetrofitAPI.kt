@@ -2,7 +2,9 @@ package com.example.magentotest
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import com.example.magentotest.Activity.ViewModels.ProductViewModel
 import com.example.magentotest.Retrofit.RetrofitFactory
+import com.example.magentotest.data.CategoryPojo
 import com.example.magentotest.data.ImageForAdding.Content
 import com.example.magentotest.data.ImageForAdding.Entry
 import com.example.magentotest.data.ImageForAdding.ImageForAdding
@@ -17,6 +19,23 @@ import retrofit2.Response
 class RetrofitAPI : BaseAPI {
 
     var retrofit = RetrofitFactory.retrofitInstance
+
+    override fun getAllCategories(livedata: MutableLiveData<CategoryPojo>) {
+        retrofit!!.getAllCategories("Bearer ${App.token}").enqueue(object : Callback<CategoryPojo> {
+            override fun onFailure(call: Call<CategoryPojo>, t: Throwable) {
+                Log.e("Error getCategories", t.message)
+            }
+
+            override fun onResponse(call: Call<CategoryPojo>, response: Response<CategoryPojo>) {
+                Log.i("OK - getCategories", response.body().toString())
+                livedata.postValue(response.body())
+            }
+        })
+
+    }
+
+
+
 
     override fun updateProduct(livedata: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String) {
         retrofit!!.updateProduct(sku, ProductPojo(product), "Bearer ${App.token}")

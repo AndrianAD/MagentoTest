@@ -8,9 +8,9 @@ import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
+import com.example.magentotest.Activity.ViewModels.ProductViewModel
 import com.example.magentotest.Adapter.ProductAdapter
 import com.example.magentotest.App
-import com.example.magentotest.ProductViewModel
 import com.example.magentotest.R
 import kotlinx.android.synthetic.main.activity_user.*
 

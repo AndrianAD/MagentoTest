@@ -1,5 +1,6 @@
 package com.example.magentotest.Retrofit
 
+import com.example.magentotest.data.CategoryPojo
 import com.example.magentotest.data.Credentials
 import com.example.magentotest.data.ImageForAdding.ImageForAdding
 import com.example.magentotest.data.Product.Product
@@ -35,5 +36,14 @@ interface Interface_API {
     @POST("rest/V1/products/{productSKU}/media")
     @Headers("Content-Type: application/json")
     fun addImage(@Path("productSKU") productSKU: String, @Body image: ImageForAdding, @Header("Authorization") token: String): Call<Int>
+
+
+    @GET(" rest/all/V1/categories")
+    fun getAllCategories(@Header("Authorization") token: String): Call<CategoryPojo>
+
+    @GET(" rest/all/V1/categories/{id}")
+    @Headers("Content-Type: application/json")
+    fun getCategorieById(@Path("id") id: Int, @Header("Authorization") token: String): Call<CategoryPojo>
+
 
 }

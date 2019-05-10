@@ -1,8 +1,12 @@
-package com.example.magentotest
+package com.example.magentotest.Activity.ViewModels
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
+import com.example.magentotest.ProductDAO
+import com.example.magentotest.ProductsRoomDatabase
+import com.example.magentotest.RetrofitAPI
+import com.example.magentotest.RoomAPI
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 
 class UploadProductViewModel(application: Application) : AndroidViewModel(application) {

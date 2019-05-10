@@ -2,10 +2,18 @@ package com.example.magentotest
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import com.example.magentotest.Activity.ViewModels.ProductViewModel
 import com.example.magentotest.Room.Model.ImageRoom
+import com.example.magentotest.data.CategoryPojo
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 
 class RoomAPI : BaseAPI {
+
+
+    override fun getAllCategories(livedata: MutableLiveData<CategoryPojo>) {
+
+    }
+
     override fun updateProduct(viewModel: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String) {}
 
     override fun insertProduct(viewModel: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String) {}

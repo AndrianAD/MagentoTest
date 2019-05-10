@@ -9,9 +9,9 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
+import com.example.magentotest.Activity.ViewModels.UploadProductViewModel
 import com.example.magentotest.ProductDAO
 import com.example.magentotest.ProductsRoomDatabase
-import com.example.magentotest.UploadProductViewModel
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 import kotlinx.android.synthetic.main.activity_upload_product.*
 import java.io.ByteArrayOutputStream

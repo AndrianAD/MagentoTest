@@ -1,6 +1,8 @@
 package com.example.magentotest
 
 import android.arch.lifecycle.MutableLiveData
+import com.example.magentotest.Activity.ViewModels.ProductViewModel
+import com.example.magentotest.data.CategoryPojo
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 
 interface BaseAPI {
@@ -13,5 +15,8 @@ interface BaseAPI {
 
     fun insertProduct(viewModel: MutableLiveData<Boolean>,product: ProductForAdding, selectedImage: String)
 
+
+
+    fun getAllCategories(livedata: MutableLiveData<CategoryPojo>)
 
 }
