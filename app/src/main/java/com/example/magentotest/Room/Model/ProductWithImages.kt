@@ -5,7 +5,7 @@ import android.arch.persistence.room.Relation
 
 class ProductWithImages(
     @Embedded
-    var productRoom: ProductRoom=ProductRoom(-1,"","",-1,"",-1,-1),
+    var productRoom: ProductRoom=ProductRoom(-1,"","",-1.0,"",-1,-1),
 
     @Relation(
         parentColumn = "sku",

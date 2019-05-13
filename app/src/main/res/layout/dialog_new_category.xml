@@ -3,13 +3,13 @@
         xmlns:android="http://schemas.android.com/apk/res/android"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layout_width="300dp"
-        android:layout_height="200dp"
+        android:layout_height="150dp"
         app:cardCornerRadius="8dp"
         app:cardElevation="8dp">
 
-    <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="match_parent"
+                  android:orientation="vertical">
 
 
         <EditText
@@ -18,32 +18,22 @@
                 android:inputType="textPersonName"
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
-                android:hint="Search"
+                android:hint="Name"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 android:layout_marginTop="20dp"
-                android:id="@+id/et_search"/>
-
-        <Spinner android:layout_width="wrap_content"
-                 android:layout_height="wrap_content"
-                 app:layout_constraintStart_toStartOf="parent"
-                 app:layout_constraintEnd_toEndOf="parent"
-                 android:spinnerMode="dialog"
-                 android:id="@+id/spinner"
-                 app:layout_constraintTop_toBottomOf="@id/et_search">
-        </Spinner>
+                android:id="@+id/et_add_name"/>
 
         <Button
                 android:text="OK"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:id="@+id/button_OK"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/spinner"
-                app:layout_constraintEnd_toEndOf="parent"/>
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:id="@+id/button_save_category"
+        android:layout_marginBottom="20dp"/>
+    </LinearLayout>
 
-
-    </android.support.constraint.ConstraintLayout>
 
 </android.support.v7.widget.CardView>

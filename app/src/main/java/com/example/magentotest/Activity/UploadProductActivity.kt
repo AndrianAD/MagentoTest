@@ -29,8 +29,6 @@ class UploadProductActivity : AppCompatActivity() {
     lateinit var productDB: ProductsRoomDatabase
     lateinit var productDao: ProductDAO
     var sku: String = ""
-    lateinit var callbackUpdateObserver: Observer<Boolean>
-    lateinit var callbackInsertObserver: Observer<Boolean>
 
     private val PICK_IMAGE = 1
 
@@ -77,19 +75,8 @@ class UploadProductActivity : AppCompatActivity() {
             }
         }
 
-        callbackUpdateObserver = Observer {
-            if (it==true)
-                finish()
-        }
-
-        callbackInsertObserver = Observer {
-            if (it==true)
-                finish()
-        }
-
-
-        uploadProductViewModel.callbackUpdateLivedata.observe(this,callbackUpdateObserver)
-        uploadProductViewModel.callbackInsertLivedata.observe(this,callbackInsertObserver)
+        uploadProductViewModel.callbackUpdateLivedata.observe(this, Observer {  if (it==true) finish() })
+        uploadProductViewModel.callbackInsertLivedata.observe(this, Observer { if (it==true) finish() })
 
         button_attach.setOnClickListener {
 
@@ -100,7 +87,6 @@ class UploadProductActivity : AppCompatActivity() {
         }
 
     }
-
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)

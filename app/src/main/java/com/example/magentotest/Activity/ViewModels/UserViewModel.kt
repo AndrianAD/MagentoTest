@@ -9,13 +9,14 @@ import com.example.magentotest.ProductsRoomDatabase
 import com.example.magentotest.RetrofitAPI
 import com.example.magentotest.Room.Model.ProductRoom
 import com.example.magentotest.RoomAPI
+import com.example.magentotest.data.CategorieForAdding.CategorieForAdding
 import com.example.magentotest.data.Product.Product
 import com.example.magentotest.data.Product.ProductList
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class ProductViewModel(application: Application) : AndroidViewModel(application) {
+class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     lateinit var productsList: ProductList
     var productWithImage = MutableLiveData<Boolean>()
@@ -23,6 +24,7 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     private var roomAPI: RoomAPI = RoomAPI()
     private var productDB: ProductsRoomDatabase
     var productDao: ProductDAO
+    var callbackAddingCategory: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
         productDB = ProductsRoomDatabase.getInstance(application)!!
@@ -30,8 +32,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
     }
 
     fun getAllProduct(type: String) {
-        Log.i("Magento", "getAllProduct, type: "
-                    + type + ", thread: " + Thread.currentThread().name)
+        Log.i(
+            "Magento", "getAllProduct, type: "
+                    + type + ", thread: " + Thread.currentThread().name
+        )
         when (type) {
             "Retrofit" -> retrofitAPI.getAllProduct(this)
             "Room" -> roomAPI.getAllProduct(this)
@@ -48,6 +52,10 @@ class ProductViewModel(application: Application) : AndroidViewModel(application)
             }
             getAllProduct("Room")
         }
+    }
+
+    fun insertCategory (category: CategorieForAdding ) {
+        retrofitAPI.insertCategory(category,callbackAddingCategory)
     }
 
     fun convertProductsToProductsRoom(productList: ProductList): ArrayList<ProductRoom> {

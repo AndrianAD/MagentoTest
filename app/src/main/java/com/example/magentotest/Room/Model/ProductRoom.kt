@@ -12,7 +12,7 @@ data class ProductRoom(
 
     @ColumnInfo(name = "type_id")
     var typeId: String,
-    var price: Int,
+    var price: Double,
     var sku: String,
     var status: Int = 1,
     var quantity: Int = 0

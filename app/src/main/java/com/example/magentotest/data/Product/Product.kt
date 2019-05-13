@@ -9,7 +9,7 @@ data class Product(
     var media_gallery_entries: List<MediaGalleryEntry> = listOf(),
     var name: String="",
     var options: List<Any> = listOf(),
-    var price: Int=1,
+    var price: Double=1.0,
     var product_links: List<Any> = listOf(),
     var sku: String="",
     var status: Int=1,

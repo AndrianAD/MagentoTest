@@ -1,5 +1,6 @@
 package com.example.magentotest.Retrofit
 
+import com.example.magentotest.data.CategorieForAdding.CategorieForAdding
 import com.example.magentotest.data.CategoryPojo
 import com.example.magentotest.data.Credentials
 import com.example.magentotest.data.ImageForAdding.ImageForAdding
@@ -44,6 +45,10 @@ interface Interface_API {
     @GET(" rest/all/V1/categories/{id}")
     @Headers("Content-Type: application/json")
     fun getCategorieById(@Path("id") id: Int, @Header("Authorization") token: String): Call<CategoryPojo>
+
+    @POST("rest/V1/categories")
+    @Headers("Content-Type: application/json")
+    fun addCategory(@Body categoryPojo: CategorieForAdding, @Header("Authorization") token: String): Call<CategoryPojo>
 
 
 }

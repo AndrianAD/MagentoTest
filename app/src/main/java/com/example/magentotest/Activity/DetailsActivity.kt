@@ -48,8 +48,8 @@ class DetailsActivity : AppCompatActivity() {
         var productWithImage = productDao.getProductWithImagesbySKU(sku)
 
 
-        tv_name_details.text = productWithImage.productRoom.name
-        tv_price_details.text = productWithImage.productRoom.price.toString()
+        tv_name_details.text = "name:  "  + productWithImage.productRoom.name
+        tv_price_details.text = "price:  " + productWithImage.productRoom.price.toString() + "$"
 
         var finalUrl: Any
         if (productWithImage.images.size > 0) {
@@ -106,22 +106,11 @@ class DetailsActivity : AppCompatActivity() {
         }
     }
 
-
     fun сategoriesToList(categorie: CategoryPojo) {
-
         listOfCategory.add(categorie.name)
         for (item in categorie.children_data) {
             сategoriesToList(item)
         }
     }
-
-    fun printCategories(categorie: CategoryPojo) {
-        Log.i("Categories", "${categorie.name}")
-
-        for (item in categorie.children_data) {
-            printCategories(item)
-        }
-    }
-
 }
 

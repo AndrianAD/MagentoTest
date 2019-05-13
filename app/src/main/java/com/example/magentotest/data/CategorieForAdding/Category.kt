@@ -1,8 +1,8 @@
 package com.example.magentotest.data.CategorieForAdding
 
 data class Category(
-    val isActive: Boolean=true,
-    val level: Int,
-    val name: String,
-    val parent_id: Int
+    var isActive: Boolean=true,
+    var level: Int=1,
+    var name: String="new Category",
+    var parent_id: Int=2
 )
