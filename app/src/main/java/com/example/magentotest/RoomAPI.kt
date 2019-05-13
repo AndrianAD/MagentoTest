@@ -11,6 +11,10 @@ import com.example.magentotest.data.ProductForAdding.ProductForAdding
 class RoomAPI : BaseAPI {
 
 
+    override fun getCategoryById(id: Int, livedata: MutableLiveData<CategoryPojo>) {
+
+    }
+
     override fun insertCategory(
         category: CategorieForAdding,
         addingCategory: MutableLiveData<Boolean>
@@ -18,12 +22,17 @@ class RoomAPI : BaseAPI {
 
     }
 
-
     override fun getAllCategories(livedata: MutableLiveData<CategoryPojo>) {
 
     }
 
-    override fun updateProduct(viewModel: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String) {}
+    override fun updateProduct(
+        viewModel: MutableLiveData<Boolean>,
+        sku: String,
+        product: ProductForAdding,
+        selectedImage: String
+    ) {
+    }
 
     override fun insertProduct(viewModel: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String) {}
 

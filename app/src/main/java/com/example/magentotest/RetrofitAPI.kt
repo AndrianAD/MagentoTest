@@ -18,11 +18,27 @@ import retrofit2.Response
 
 
 class RetrofitAPI : BaseAPI {
-
     var retrofit = RetrofitFactory.retrofitInstance
 
+    override fun getCategoryById(id: Int, callback: MutableLiveData<CategoryPojo>) {
+
+        retrofit!!.getCategorieById(id, "Bearer ${App.token}").enqueue(object : Callback<CategoryPojo> {
+            override fun onFailure(call: Call<CategoryPojo>, t: Throwable) {
+                Log.e("Error getCategoriesById", t.message)
+            }
+
+            override fun onResponse(call: Call<CategoryPojo>, response: Response<CategoryPojo>) {
+                Log.i("OK - getCategoriesById", response.body().toString())
+                callback.postValue(response.body())
+            }
+        })
+
+
+    }
+
+
     override fun insertCategory(category: CategorieForAdding, callback: MutableLiveData<Boolean>) {
-        retrofit!!.addCategory(category,"Bearer ${App.token}").enqueue(object : Callback<CategoryPojo>{
+        retrofit!!.addCategory(category, "Bearer ${App.token}").enqueue(object : Callback<CategoryPojo> {
             override fun onFailure(call: Call<CategoryPojo>, t: Throwable) {
                 Log.e("Error ADDCategories", t.message)
                 callback.postValue(false)

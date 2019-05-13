@@ -15,7 +15,8 @@ class DetailsActivityViewModel(application: Application) : AndroidViewModel(appl
     private var retrofitAPI: RetrofitAPI = RetrofitAPI()
     private var roomAPI: RoomAPI = RoomAPI()
     private var productDB: ProductsRoomDatabase
-    var livedataCategory: MutableLiveData<CategoryPojo> = MutableLiveData()
+    var allCategories: MutableLiveData<CategoryPojo> = MutableLiveData()
+    var idCategory: MutableLiveData<CategoryPojo> = MutableLiveData()
 
     var productDao: ProductDAO
 
@@ -24,9 +25,12 @@ class DetailsActivityViewModel(application: Application) : AndroidViewModel(appl
         productDao = productDB.userDao()
     }
 
+    fun getCategoryById(id: Int){
+        retrofitAPI.getCategoryById(id,idCategory)
+    }
 
     fun getAllCategories() {
-        retrofitAPI.getAllCategories(livedataCategory)
+        retrofitAPI.getAllCategories(allCategories)
     }
 
     override fun onCleared() {

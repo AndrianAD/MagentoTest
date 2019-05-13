@@ -1,21 +1,21 @@
 package com.example.magentotest.data.Product
 
 data class Product(
-    var attribute_set_id: Int=1,
-    var created_at: String="",
-    var custom_attributes: List<CustomAttribute> = listOf(),
-    var extension_attributes: ExtensionAttributes?=null,
-    var id: Int=1,
-    var media_gallery_entries: List<MediaGalleryEntry> = listOf(),
-    var name: String="",
-    var options: List<Any> = listOf(),
-    var price: Double=1.0,
-    var product_links: List<Any> = listOf(),
-    var sku: String="",
-    var status: Int=1,
-    var tier_prices: List<Any> = listOf(),
-    var type_id: String="",
-    var updated_at: String="",
-    var visibility: Int=-1,
-    var weight: Int=1
+    val attribute_set_id: Int,
+    val created_at: String,
+    val custom_attributes: List<CustomAttribute>,
+    val extension_attributes: ExtensionAttributes,
+    val id: Int,
+    val media_gallery_entries: List<MediaGalleryEntry>,
+    val name: String,
+    val options: List<Any>,
+    val price: Double,
+    val product_links: List<Any>,
+    val sku: String,
+    val status: Int,
+    val tier_prices: List<Any>,
+    val type_id: String,
+    val updated_at: String,
+    val visibility: Int,
+    val weight: Int
 )

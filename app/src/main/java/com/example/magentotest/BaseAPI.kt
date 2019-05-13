@@ -17,6 +17,9 @@ interface BaseAPI {
     fun insertProduct(viewModel: MutableLiveData<Boolean>,product: ProductForAdding, selectedImage: String)
 
     fun insertCategory(category: CategorieForAdding, addingCategory: MutableLiveData<Boolean>)
+
     fun getAllCategories(livedata: MutableLiveData<CategoryPojo>)
+
+    fun getCategoryById(id: Int,livedata: MutableLiveData<CategoryPojo>)
 
 }

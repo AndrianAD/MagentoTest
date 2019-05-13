@@ -16,7 +16,7 @@ data class ProductRoom(
     var sku: String,
     var status: Int = 1,
     var quantity: Int = 0
-) {
+    ) {
 
 
     //TODO stock_item.qty - to change!

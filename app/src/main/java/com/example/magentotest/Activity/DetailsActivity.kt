@@ -32,7 +32,6 @@ class DetailsActivity : AppCompatActivity() {
     }
     lateinit var productDB: ProductsRoomDatabase
     lateinit var productDao: ProductDAO
-    lateinit var categoryObserver: Observer<CategoryPojo>
     var listOfCategory = ArrayList<String>()
 
 
@@ -43,12 +42,18 @@ class DetailsActivity : AppCompatActivity() {
         productDB = ProductsRoomDatabase.getInstance(this)!!
         productDao = productDB.userDao()
 
-
         var sku = intent.getStringExtra(EXTRA_PRODUCT_SKU)
         var productWithImage = productDao.getProductWithImagesbySKU(sku)
 
 
-        tv_name_details.text = "name:  "  + productWithImage.productRoom.name
+//        detailsActivityViewModel.getCategoryById()
+//        detailsActivityViewModel.idCategory.observe(this, Observer {
+//            if (it != null) {
+//                current_category.text = it.name
+//            }
+//        })
+
+        tv_name_details.text = "name:  " + productWithImage.productRoom.name
         tv_price_details.text = "price:  " + productWithImage.productRoom.price.toString() + "$"
 
         var finalUrl: Any
@@ -64,11 +69,7 @@ class DetailsActivity : AppCompatActivity() {
             .error(R.drawable.no_image_available)
             .into(imageView_details)
 
-
-        categoryObserver = Observer {
-            сategoriesToList(it!!)
-        }
-        detailsActivityViewModel.livedataCategory.observe(this, categoryObserver)
+        detailsActivityViewModel.allCategories.observe(this, Observer { сategoriesToList(it!!) })
 
         detailsActivityViewModel.getAllCategories()
 
