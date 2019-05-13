@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.PopupMenu
 import com.bumptech.glide.Glide
 import com.example.magentotest.Activity.DetailsActivity
+import com.example.magentotest.Activity.UploadProductActivity
 import com.example.magentotest.R
 import com.example.magentotest.Room.Model.ProductWithImages
 import com.example.magentotest.Utils.imageBaseURL
@@ -55,6 +56,7 @@ class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapte
         Log.i("Image", "$finalUrl")
         Glide.with(context)
             .load(finalUrl)
+            .centerCrop()
             .error(R.drawable.no_image_available)
             .into(parent.imageView)
 
@@ -75,9 +77,11 @@ class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapte
                 when (it.itemId) {
                     R.id.edit_product -> {
                         context.toast("Edit")
+                        var intent = Intent(context, UploadProductActivity::class.java)
+                        intent.putExtra(DetailsActivity.EXTRA_PRODUCT_SKU, listProducts.get(position).productRoom.sku)
+                        context.startActivity(intent)
 
                     }
-
                     R.id.delete_product -> {
                         context.toast("Delete")
                     }
@@ -89,7 +93,6 @@ class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapte
 
         }
     }
-
 
     class UserViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 
