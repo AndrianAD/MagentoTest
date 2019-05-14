@@ -1,6 +1,7 @@
 package com.example.magentotest.Activity
 
 import android.app.Activity
+import android.app.Dialog
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
@@ -9,14 +10,26 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.support.v7.app.AppCompatActivity
+import android.util.Log
+import android.view.View
+import android.view.Window
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
 import com.example.magentotest.Activity.ViewModels.UploadProductViewModel
 import com.example.magentotest.ProductDAO
 import com.example.magentotest.ProductsRoomDatabase
+import com.example.magentotest.R
+import com.example.magentotest.data.CategoryPojo
+import com.example.magentotest.data.Product.CategoryLink
+import com.example.magentotest.data.Product.ExtensionAttributes
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 import kotlinx.android.synthetic.main.activity_upload_product.*
+import kotlinx.android.synthetic.main.activity_upload_product.button_OK
+import kotlinx.android.synthetic.main.dialog_category.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
 import java.io.IOException
+import java.util.*
 
 
 class UploadProductActivity : AppCompatActivity() {
@@ -29,12 +42,14 @@ class UploadProductActivity : AppCompatActivity() {
     lateinit var productDB: ProductsRoomDatabase
     lateinit var productDao: ProductDAO
     var sku: String = ""
+    var listOfCategory = ArrayList<CategoryPojo>()
+    var namesOfCategories = ArrayList<String>()
 
     private val PICK_IMAGE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.example.magentotest.R.layout.activity_upload_product)
+        setContentView(R.layout.activity_upload_product)
 
         productDB = ProductsRoomDatabase.getInstance(this)!!
         productDao = productDB.userDao()
@@ -54,29 +69,45 @@ class UploadProductActivity : AppCompatActivity() {
             if (isEditind == true) {
                 val product = ProductForAdding(
                     name = et_name.text.toString(),
-                    price = et_price.text.toString().toInt(),
+                    price = et_price.text.toString().toDouble(),
                     sku = et_name.text.toString(),
-                    weight = 20
+                    weight = 20,
+                    extension_attributes = ExtensionAttributes(category_links = listOf(CategoryLink(2.toString())))
                 )
                 if (!selectedImage.isNullOrEmpty()) {
-                    uploadProductViewModel.updateProduct(uploadProductViewModel.callbackUpdateLivedata, sku, product, selectedImage!!)
+                    uploadProductViewModel.updateProduct(
+                        uploadProductViewModel.callbackUpdateLivedata,
+                        sku,
+                        product,
+                        selectedImage!!
+                    )
                 }
             } else {
-
                 val product = ProductForAdding(
                     name = et_name.text.toString(),
-                    price = et_price.text.toString().toInt(),
+                    price = et_price.text.toString().toDouble(),
                     sku = et_name.text.toString(),
                     weight = 20
                 )
                 if (!selectedImage.isNullOrEmpty()) {
-                    uploadProductViewModel.insertProduct(uploadProductViewModel.callbackInsertLivedata,product, selectedImage!!)
+                    uploadProductViewModel.insertProduct(
+                        uploadProductViewModel.callbackInsertLivedata,
+                        product,
+                        selectedImage!!
+                    )
                 }
             }
         }
 
-        uploadProductViewModel.callbackUpdateLivedata.observe(this, Observer {  if (it==true) finish() })
-        uploadProductViewModel.callbackInsertLivedata.observe(this, Observer { if (it==true) finish() })
+        uploadProductViewModel.callbackUpdateLivedata.observe(this, Observer { if (it == true) finish() })
+        uploadProductViewModel.callbackInsertLivedata.observe(this, Observer { if (it == true) finish() })
+
+        uploadProductViewModel.allCategories.observe(this, Observer {
+            сategoriesToList(it!!)
+            getNamesOfCategories(it!!)
+        })
+        uploadProductViewModel.getAllCategories()
+
 
         button_attach.setOnClickListener {
 
@@ -86,6 +117,31 @@ class UploadProductActivity : AppCompatActivity() {
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
         }
 
+
+        btn_add_category.setOnClickListener {
+
+            var dialog = Dialog(this)
+            dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+            dialog.setCancelable(true)
+            dialog.setContentView(R.layout.dialog_category)
+            dialog.show()
+            dialog.spinner.adapter = ArrayAdapter(
+                this,
+                android.R.layout.simple_spinner_dropdown_item,
+                namesOfCategories
+            )
+            dialog.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    Log.i("Click", "positions $position")
+                    Log.i("Click", "id ${listOfCategory.get(position).id}")
+                }
+            }
+            dialog.button_OK.setOnClickListener {
+                dialog.dismiss()
+            }
+        }
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -113,6 +169,20 @@ class UploadProductActivity : AppCompatActivity() {
         bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream)
         val byteArray = byteArrayOutputStream.toByteArray()
         return android.util.Base64.encodeToString(byteArray, android.util.Base64.DEFAULT)
+    }
+
+    fun сategoriesToList(categorie: CategoryPojo) {
+        listOfCategory.add(categorie)
+        for (item in categorie.children_data) {
+            сategoriesToList(item)
+        }
+    }
+
+    fun getNamesOfCategories(categorie: CategoryPojo) {
+        namesOfCategories.add(categorie.name)
+        for (item in categorie.children_data) {
+            getNamesOfCategories(item)
+        }
     }
 
 

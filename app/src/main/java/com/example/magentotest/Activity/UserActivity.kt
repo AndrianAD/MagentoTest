@@ -13,6 +13,7 @@ import com.example.magentotest.Activity.ViewModels.UserViewModel
 import com.example.magentotest.Adapter.ProductAdapter
 import com.example.magentotest.App
 import com.example.magentotest.R
+import com.example.magentotest.RetrofitAPI
 import com.example.magentotest.Utils.toast
 import com.example.magentotest.data.CategorieForAdding.CategorieForAdding
 import com.example.magentotest.data.CategorieForAdding.Category
@@ -37,8 +38,8 @@ class UserActivity : AppCompatActivity() {
         userViewModel.getAllProduct("Retrofit")
 
         swipe_refresh.setOnRefreshListener {
-            userViewModel.productDao.delleteAllImages()
-            userViewModel.productDao.delleteAllProducts()
+            userViewModel.productDao.deleteAllImages()
+            userViewModel.productDao.deleteAllProducts()
             userViewModel.getAllProduct("Retrofit")
             swipe_refresh.isRefreshing = false
 
@@ -50,7 +51,7 @@ class UserActivity : AppCompatActivity() {
 
         userViewModel.productWithImage.observe(this, Observer {
             if (it != null) {
-                productAdapter.setItemList(App.productWithImages)
+                productAdapter.setItemList(App.productWithImageAndCategories)
             }
         })
     }
@@ -82,7 +83,7 @@ class UserActivity : AppCompatActivity() {
                     var newCategory = Category()
                     if (!dialog.et_add_name.text.isNullOrEmpty()) {
                         newCategory.name = dialog.et_add_name.text.toString()
-                        userViewModel.insertCategory(CategorieForAdding(newCategory))
+                        userViewModel.insertCategory(RetrofitAPI(),CategorieForAdding(newCategory))
                         userViewModel.callbackAddingCategory.observe(
                             this,
                             Observer {

@@ -12,18 +12,18 @@ import com.bumptech.glide.Glide
 import com.example.magentotest.Activity.DetailsActivity
 import com.example.magentotest.Activity.UploadProductActivity
 import com.example.magentotest.R
-import com.example.magentotest.Room.Model.ProductWithImages
+import com.example.magentotest.Room.Model.ProductWithImagesAndCategory
 import com.example.magentotest.Utils.imageBaseURL
 import com.example.magentotest.Utils.toast
 import kotlinx.android.synthetic.main.recycler_view_element.view.*
 
 
-class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapter<ProductAdapter.UserViewHolder>() {
-    var listProducts: List<ProductWithImages> = productList
+class ProductAdapter(productListAndCategory: List<ProductWithImagesAndCategory>) : RecyclerView.Adapter<ProductAdapter.UserViewHolder>() {
+    var listProductAndCategories: List<ProductWithImagesAndCategory> = productListAndCategory
     lateinit var context: Context
 
-    fun setItemList(items: List<ProductWithImages>) {
-        this.listProducts = items
+    fun setItemList(items: List<ProductWithImagesAndCategory>) {
+        this.listProductAndCategories = items
         notifyDataSetChanged()
     }
 
@@ -35,19 +35,19 @@ class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapte
     }
 
     override fun getItemCount(): Int {
-        return listProducts.size
+        return listProductAndCategories.size
     }
 
     override fun onBindViewHolder(parent: UserViewHolder, position: Int) {
 
 
-        val price = String.format("Price: %.2f$", listProducts.get(position).productRoom.price)
-        parent.name.text = listProducts.get(position).productRoom.name
+        val price = String.format("Price: %.2f$", listProductAndCategories.get(position).productRoom.price)
+        parent.name.text = listProductAndCategories.get(position).productRoom.name
         parent.price.text = price
 
         var finalUrl: Any
-        if (listProducts.get(position).images.size > 0) {
-            var file: String = listProducts.get(position).images.get(0).pathImage
+        if (listProductAndCategories.get(position).images.size > 0) {
+            var file: String = listProductAndCategories.get(position).images.get(0).pathImage
             finalUrl = "$imageBaseURL$file"
 
         } else {
@@ -62,7 +62,7 @@ class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapte
 
         parent.itemView.setOnClickListener {
             val intent = Intent(context, DetailsActivity::class.java)
-            intent.putExtra(DetailsActivity.EXTRA_PRODUCT_SKU, listProducts.get(position).productRoom.sku)
+            intent.putExtra(DetailsActivity.EXTRA_PRODUCT_SKU, listProductAndCategories.get(position).productRoom.sku)
             context.startActivity(intent)
         }
 
@@ -78,7 +78,7 @@ class ProductAdapter(productList: List<ProductWithImages>) : RecyclerView.Adapte
                     R.id.edit_product -> {
                         context.toast("Edit")
                         var intent = Intent(context, UploadProductActivity::class.java)
-                        intent.putExtra(DetailsActivity.EXTRA_PRODUCT_SKU, listProducts.get(position).productRoom.sku)
+                        intent.putExtra(DetailsActivity.EXTRA_PRODUCT_SKU, listProductAndCategories.get(position).productRoom.sku)
                         context.startActivity(intent)
 
                     }

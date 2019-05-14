@@ -10,15 +10,10 @@ import com.example.magentotest.data.ProductForAdding.ProductForAdding
 
 class RoomAPI : BaseAPI {
 
+    var dataBase = App.DataBASE
+    var productDao = dataBase!!.userDao()
 
     override fun getCategoryById(id: Int, livedata: MutableLiveData<CategoryPojo>) {
-
-    }
-
-    override fun insertCategory(
-        category: CategorieForAdding,
-        addingCategory: MutableLiveData<Boolean>
-    ) {
 
     }
 
@@ -34,7 +29,10 @@ class RoomAPI : BaseAPI {
     ) {
     }
 
-    override fun insertProduct(viewModel: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String) {}
+    override fun insertProduct(viewModel: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String) {
+
+
+    }
 
     override fun insertImage(viewModel: UserViewModel) {
 
@@ -49,14 +47,20 @@ class RoomAPI : BaseAPI {
                 }
             }
             for (item in listOfFoto) {
-                viewModel.productDao.insertImage(item)
+                productDao.insertImage(item)
             }
         }
     }
 
 
+    override fun insertCategory(category: CategorieForAdding, addingCategory: MutableLiveData<Boolean>) {
+
+
+    }
+
+
     override fun getAllProduct(viewModel: UserViewModel) {
-        App.productWithImages = viewModel.productDao.loadProductWithImages()
+        App.productWithImageAndCategories = productDao.loadProductWithImages()
         viewModel.productWithImage.postValue(true)
     }
 

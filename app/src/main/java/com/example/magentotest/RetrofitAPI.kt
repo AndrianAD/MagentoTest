@@ -81,6 +81,7 @@ class RetrofitAPI : BaseAPI {
 
                 override fun onResponse(call: Call<ProductList>, response: Response<ProductList>) {
                     Log.i("retrofit", response.body().toString())
+
                     var image = ImageForAdding(Entry(content = Content(selectedImage, product.name + "foto")))
                     retrofit!!.addImage(sku, image, "Bearer ${App.token}").enqueue(object : Callback<Int> {
                         override fun onFailure(call: Call<Int>, t: Throwable) {
@@ -112,7 +113,6 @@ class RetrofitAPI : BaseAPI {
                     Log.i("retrofit", response.body().toString())
 
                     var image = ImageForAdding(Entry(content = Content(selectedImage, product.name + "foto")))
-
                     retrofit!!.addImage(product.sku, image, "Bearer ${App.token}").enqueue(object : Callback<Int> {
                         override fun onFailure(call: Call<Int>, t: Throwable) {
                             Log.e("retrofit", t.message)
@@ -130,6 +130,8 @@ class RetrofitAPI : BaseAPI {
 
 
     override fun insertImage(viewModel: UserViewModel) {
+
+
 
     }
 

@@ -4,11 +4,8 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
-import com.example.magentotest.ProductDAO
-import com.example.magentotest.ProductsRoomDatabase
-import com.example.magentotest.RetrofitAPI
+import com.example.magentotest.*
 import com.example.magentotest.Room.Model.ProductRoom
-import com.example.magentotest.RoomAPI
 import com.example.magentotest.data.CategorieForAdding.CategorieForAdding
 import com.example.magentotest.data.Product.Product
 import com.example.magentotest.data.Product.ProductList
@@ -27,7 +24,7 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     var callbackAddingCategory: MutableLiveData<Boolean> = MutableLiveData()
 
     init {
-        productDB = ProductsRoomDatabase.getInstance(application)!!
+        productDB = App.DataBASE
         productDao = productDB.userDao()
     }
 
@@ -44,8 +41,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
 
     fun saveProductToDb() {
         Log.e("Magento", "saveToDB, " + ", thread: " + Thread.currentThread().name)
-        val listofProductRoom = convertProductsToProductsRoom(productsList)
         roomAPI.insertImage(this)
+        val listofProductRoom = convertProductsToProductsRoom(productsList)
         GlobalScope.launch(Dispatchers.Default) {
             for (item in listofProductRoom) {
                 productDao.insert(item)
@@ -54,8 +51,8 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
         }
     }
 
-    fun insertCategory (category: CategorieForAdding ) {
-        retrofitAPI.insertCategory(category,callbackAddingCategory)
+    fun insertCategory(api: BaseAPI, category: CategorieForAdding) {
+        api.insertCategory(category, callbackAddingCategory)
     }
 
     fun convertProductsToProductsRoom(productList: ProductList): ArrayList<ProductRoom> {

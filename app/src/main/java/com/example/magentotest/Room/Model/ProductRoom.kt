@@ -19,10 +19,9 @@ data class ProductRoom(
     ) {
 
 
-    //TODO stock_item.qty - to change!
+    //TODO quantity
     @Ignore
     constructor(product: Product) : this(
         0, product.name, product.type_id, product.price, product.sku, product.status,
-        0
-    )
+        0)
 }
