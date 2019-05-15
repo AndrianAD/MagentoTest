@@ -5,10 +5,10 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.example.magentotest.*
+import com.example.magentotest.Model.CategoryPojo
+import com.example.magentotest.Model.Product.ProductList
+import com.example.magentotest.Model.ProductForAdding.ProductForAdding
 import com.example.magentotest.Utils.Utils
-import com.example.magentotest.data.CategoryPojo
-import com.example.magentotest.data.Product.ProductList
-import com.example.magentotest.data.ProductForAdding.ProductForAdding
 
 class UploadProductViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -31,11 +31,7 @@ class UploadProductViewModel(application: Application) : AndroidViewModel(applic
         retrofitAPI.insertProduct(livedata, product, selectedImage)
     }
 
-    fun updateProduct(
-        livedata: MutableLiveData<Boolean>,
-        sku: String,
-        product: ProductForAdding,
-        selectedImage: String?
+    fun updateProduct(livedata: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String?
     ) {
         retrofitAPI.updateProduct(livedata, sku, product, selectedImage)
     }

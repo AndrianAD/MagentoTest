@@ -1,8 +1,8 @@
 package com.example.magentotest.Utils
 
+import com.example.magentotest.Model.Product.Product
+import com.example.magentotest.Model.Product.ProductList
 import com.example.magentotest.Room.Model.ProductRoom
-import com.example.magentotest.data.Product.Product
-import com.example.magentotest.data.Product.ProductList
 
 object Utils {
 

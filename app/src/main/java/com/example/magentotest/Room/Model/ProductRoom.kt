@@ -1,7 +1,7 @@
 package com.example.magentotest.Room.Model
 
 import android.arch.persistence.room.*
-import com.example.magentotest.data.Product.Product
+import com.example.magentotest.Model.Product.Product
 
 @Entity(tableName = "products", indices = arrayOf(Index(value = ["sku"], unique = true)))
 

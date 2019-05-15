@@ -2,27 +2,27 @@ package com.example.magentotest
 
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
+import com.example.magentotest.Model.CategorieForAdding.CategorieForAdding
+import com.example.magentotest.Model.CategoryPojo
+import com.example.magentotest.Model.ImageForAdding.Content
+import com.example.magentotest.Model.ImageForAdding.Entry
+import com.example.magentotest.Model.ImageForAdding.ImageForAdding
+import com.example.magentotest.Model.Product.Product
+import com.example.magentotest.Model.Product.ProductList
+import com.example.magentotest.Model.ProductForAdding.ProductForAdding
+import com.example.magentotest.Model.ProductForAdding.ProductPojo
 import com.example.magentotest.Retrofit.RetrofitFactory
-import com.example.magentotest.data.CategorieForAdding.CategorieForAdding
-import com.example.magentotest.data.CategoryPojo
-import com.example.magentotest.data.ImageForAdding.Content
-import com.example.magentotest.data.ImageForAdding.Entry
-import com.example.magentotest.data.ImageForAdding.ImageForAdding
-import com.example.magentotest.data.Product.Product
-import com.example.magentotest.data.Product.ProductList
-import com.example.magentotest.data.ProductForAdding.ProductForAdding
-import com.example.magentotest.data.ProductForAdding.ProductPojo
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
 
-class RetrofitAPI : BaseAPI {
+class RetrofitAPI {
 
     var retrofit = RetrofitFactory.retrofitInstance
 
 
-    override fun getProductbySKU(sku: String, callback: MutableLiveData<Product>) {
+    fun getProductbySKU(sku: String, callback: MutableLiveData<Product>) {
         retrofit!!.getProductbySKU(sku, "Bearer ${App.token}").enqueue(object : Callback<Product> {
             override fun onFailure(call: Call<Product>, t: Throwable) {
                 Log.e("Error getProductbySKU", t.message)
@@ -34,7 +34,7 @@ class RetrofitAPI : BaseAPI {
         })
     }
 
-    override fun getCategoryById(id: Int, callback: MutableLiveData<CategoryPojo>) {
+    fun getCategoryById(id: Int, callback: MutableLiveData<CategoryPojo>) {
 
         retrofit!!.getCategorieById(id, "Bearer ${App.token}").enqueue(object : Callback<CategoryPojo> {
             override fun onFailure(call: Call<CategoryPojo>, t: Throwable) {
@@ -50,13 +50,14 @@ class RetrofitAPI : BaseAPI {
 
     }
 
-    override fun insertCategory(category: CategorieForAdding, callback: MutableLiveData<Boolean>) {
+    fun insertCategory(category: CategorieForAdding, callback: MutableLiveData<Boolean>) {
         retrofit!!.addCategory(category, "Bearer ${App.token}").enqueue(object : Callback<CategoryPojo> {
             override fun onFailure(call: Call<CategoryPojo>, t: Throwable) {
                 Log.e("Error ADDCategories", t.message)
                 callback.postValue(false)
 
             }
+
             override fun onResponse(call: Call<CategoryPojo>, response: Response<CategoryPojo>) {
                 Log.i("OK - ADDCategories", response.body().toString())
                 callback.postValue(true)
@@ -65,7 +66,7 @@ class RetrofitAPI : BaseAPI {
 
     }
 
-    override fun getAllCategories(callback: MutableLiveData<CategoryPojo>) {
+    fun getAllCategories(callback: MutableLiveData<CategoryPojo>) {
         retrofit!!.getAllCategories("Bearer ${App.token}").enqueue(object : Callback<CategoryPojo> {
             override fun onFailure(call: Call<CategoryPojo>, t: Throwable) {
                 Log.e("Error getCategories", t.message)
@@ -79,19 +80,18 @@ class RetrofitAPI : BaseAPI {
 
     }
 
-    override fun updateProduct(
-        callback: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String?
-    ) {
+    fun updateProduct(callback: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String?) {
         retrofit!!.updateProduct(sku, ProductPojo(product), "Bearer ${App.token}")
             .enqueue(object : Callback<ProductList> {
                 override fun onFailure(call: Call<ProductList>, t: Throwable) {
                     Log.e("retrofit", t.message)
-                    callback.postValue(false)
+                   callback.postValue(false)
                 }
+
                 override fun onResponse(call: Call<ProductList>, response: Response<ProductList>) {
                     Log.i("retrofit", response.body().toString())
                     if (selectedImage == null) {
-                        callback.postValue(true)
+                       callback.postValue(true)
                     } else {
                         attachImageToProduct(callback, product, selectedImage)
                     }
@@ -99,7 +99,7 @@ class RetrofitAPI : BaseAPI {
             })
     }
 
-    override fun insertProduct(callback: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String?) {
+     fun insertProduct(callback: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String?) {
 
         retrofit!!.addProduct(ProductPojo(product), "Bearer ${App.token}")
             .enqueue(object : Callback<ProductList> {
@@ -107,6 +107,7 @@ class RetrofitAPI : BaseAPI {
                     Log.e("retrofit", t.message)
 
                 }
+
                 override fun onResponse(call: Call<ProductList>, response: Response<ProductList>) {
                     Log.i("retrofit", response.body().toString())
                     if (selectedImage == null) {
@@ -141,6 +142,7 @@ class RetrofitAPI : BaseAPI {
                 override fun onFailure(call: Call<ProductList>, t: Throwable) {
                     Log.e("Error: ", t.message)
                 }
+
                 override fun onResponse(call: Call<ProductList>, response: Response<ProductList>) {
                     Log.i("Response : getAllProductsFromServer - OK ", response.message())
                     callback.postValue(response.body())

@@ -5,9 +5,9 @@ import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.example.magentotest.*
+import com.example.magentotest.Model.CategorieForAdding.CategorieForAdding
+import com.example.magentotest.Model.Product.ProductList
 import com.example.magentotest.Utils.Utils
-import com.example.magentotest.data.CategorieForAdding.CategorieForAdding
-import com.example.magentotest.data.Product.ProductList
 
 class UserViewModel(application: Application) : AndroidViewModel(application) {
 
@@ -41,16 +41,23 @@ class UserViewModel(application: Application) : AndroidViewModel(application) {
     }
 
 
+    fun insertCategoryRetrofit(category: CategorieForAdding) {
+        retrofitAPI.insertCategory(category, callbackAddingCategory)
+    }
+
+    fun insertCategoryRoom(productList: ProductList) {
+        roomAPI.insertCategory(productList)
+    }
+
+
+
+
     fun saveProductToDb() {
         Log.e("Magento", "saveToDB, " + ", thread: " + Thread.currentThread().name)
         val listOfProductRoom = Utils.convertProductsToProductsRoom(productsList.value!!)
         roomAPI.insertProductRoomList(listOfProductRoom)
-
     }
 
-    fun insertCategory(category: CategorieForAdding) {
-        retrofitAPI.insertCategory(category, callbackAddingCategory)
-    }
 
     override fun onCleared() {
         super.onCleared()

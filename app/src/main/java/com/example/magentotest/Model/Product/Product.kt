@@ -1,4 +1,4 @@
-package com.example.magentotest.data.Product
+package com.example.magentotest.Model.Product
 
 data class Product(
     val attribute_set_id: Int,

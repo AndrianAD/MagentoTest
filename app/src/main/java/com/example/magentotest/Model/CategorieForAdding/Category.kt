@@ -1,4 +1,4 @@
-package com.example.magentotest.data.CategorieForAdding
+package com.example.magentotest.Model.CategorieForAdding
 
 data class Category(
     var isActive: Boolean=true,

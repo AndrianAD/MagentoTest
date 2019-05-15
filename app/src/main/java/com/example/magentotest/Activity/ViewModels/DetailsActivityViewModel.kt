@@ -5,7 +5,7 @@ import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import com.example.magentotest.*
-import com.example.magentotest.data.Product.Product
+import com.example.magentotest.Model.Product.Product
 
 class DetailsActivityViewModel(application: Application) : AndroidViewModel(application) {
 

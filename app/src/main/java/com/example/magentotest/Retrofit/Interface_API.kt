@@ -1,12 +1,12 @@
 package com.example.magentotest.Retrofit
 
-import com.example.magentotest.data.CategorieForAdding.CategorieForAdding
-import com.example.magentotest.data.CategoryPojo
-import com.example.magentotest.data.Credentials
-import com.example.magentotest.data.ImageForAdding.ImageForAdding
-import com.example.magentotest.data.Product.Product
-import com.example.magentotest.data.Product.ProductList
-import com.example.magentotest.data.ProductForAdding.ProductPojo
+import com.example.magentotest.Model.CategorieForAdding.CategorieForAdding
+import com.example.magentotest.Model.CategoryPojo
+import com.example.magentotest.Model.Credentials
+import com.example.magentotest.Model.ImageForAdding.ImageForAdding
+import com.example.magentotest.Model.Product.Product
+import com.example.magentotest.Model.Product.ProductList
+import com.example.magentotest.Model.ProductForAdding.ProductPojo
 import retrofit2.Call
 import retrofit2.http.*
 

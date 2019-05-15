@@ -1,4 +1,4 @@
-package com.example.magentotest.data.ImageForAdding
+package com.example.magentotest.Model.ImageForAdding
 
 data class Entry(
     val content: Content,

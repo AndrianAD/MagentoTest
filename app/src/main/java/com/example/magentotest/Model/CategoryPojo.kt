@@ -1,4 +1,4 @@
-package com.example.magentotest.data
+package com.example.magentotest.Model
 
 data class CategoryPojo(
     val children_data: List<CategoryPojo>,

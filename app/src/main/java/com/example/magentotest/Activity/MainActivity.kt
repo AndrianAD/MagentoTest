@@ -4,9 +4,9 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
+import com.example.magentotest.Model.Credentials
 import com.example.magentotest.R
 import com.example.magentotest.Retrofit.RetrofitFactory
-import com.example.magentotest.data.Credentials
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Response

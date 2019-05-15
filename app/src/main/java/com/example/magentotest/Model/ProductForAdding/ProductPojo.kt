@@ -1,6 +1,6 @@
-package com.example.magentotest.data.ProductForAdding
+package com.example.magentotest.Model.ProductForAdding
 
-import com.example.magentotest.data.Product.ExtensionAttributes
+import com.example.magentotest.Model.Product.ExtensionAttributes
 
 data class ProductPojo(
     val product: ProductForAdding
@@ -14,5 +14,5 @@ data class ProductForAdding(
     val type_id: String = "simple",
     val attribute_set_id: Int = 4,
     val weight: Int=0,
-    val extension_attributes:ExtensionAttributes?=null
+    var extension_attributes:ExtensionAttributes?=null
 )

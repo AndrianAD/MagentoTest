@@ -16,13 +16,13 @@ import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.magentotest.Activity.ViewModels.UploadProductViewModel
+import com.example.magentotest.Model.CategoryPojo
+import com.example.magentotest.Model.Product.CategoryLink
+import com.example.magentotest.Model.Product.ExtensionAttributes
+import com.example.magentotest.Model.ProductForAdding.ProductForAdding
 import com.example.magentotest.ProductDAO
 import com.example.magentotest.ProductsRoomDatabase
 import com.example.magentotest.R
-import com.example.magentotest.data.CategoryPojo
-import com.example.magentotest.data.Product.CategoryLink
-import com.example.magentotest.data.Product.ExtensionAttributes
-import com.example.magentotest.data.ProductForAdding.ProductForAdding
 import kotlinx.android.synthetic.main.activity_upload_product.*
 import kotlinx.android.synthetic.main.dialog_category.*
 import java.io.ByteArrayOutputStream
@@ -135,31 +135,33 @@ class UploadProductActivity : AppCompatActivity() {
                 android.R.layout.simple_spinner_dropdown_item,
                 namesOfCategories
             )
+            var clickedItem:Int=0
             dialog.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
 
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     Log.i("Click", "positions $position")
                     Log.i("Click", "id ${listOfCategory.get(position).id}")
-                    val product = ProductForAdding(
-                        name = et_name.text.toString(),
-                        price = et_price.text.toString().toDouble(),
-                        sku = et_name.text.toString(),
-                        weight = 20,
-                        extension_attributes = ExtensionAttributes(
-                            category_links = listOf(CategoryLink(listOfCategory.get(position).id.toString()))
-                        )
-                    )
-                    uploadProductViewModel.updateProduct(
-                        uploadProductViewModel.callbackUpdateLivedata,
-                        sku,
-                        product,
-                        selectedImage
-                    )
+                    clickedItem=position
                 }
             }
             dialog.button_OK.setOnClickListener {
                 dialog.dismiss()
+                val product = ProductForAdding(
+                    name = et_name.text.toString(),
+                    price = et_price.text.toString().toDouble(),
+                    sku = et_name.text.toString(),
+                    extension_attributes = ExtensionAttributes(
+                        category_links = listOf(CategoryLink(listOfCategory.get(clickedItem).id.toString()))
+                    )
+                )
+                uploadProductViewModel.updateProduct(
+                    uploadProductViewModel.callbackUpdateLivedata,
+                    sku,
+                    product,
+                    selectedImage
+                )
+
             }
         }
     }
