@@ -24,7 +24,6 @@ import com.example.magentotest.data.Product.CategoryLink
 import com.example.magentotest.data.Product.ExtensionAttributes
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 import kotlinx.android.synthetic.main.activity_upload_product.*
-import kotlinx.android.synthetic.main.activity_upload_product.button_OK
 import kotlinx.android.synthetic.main.dialog_category.*
 import java.io.ByteArrayOutputStream
 import java.io.FileNotFoundException
@@ -44,7 +43,6 @@ class UploadProductActivity : AppCompatActivity() {
     var sku: String = ""
     var listOfCategory = ArrayList<CategoryPojo>()
     var namesOfCategories = ArrayList<String>()
-
     private val PICK_IMAGE = 1
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,51 +54,59 @@ class UploadProductActivity : AppCompatActivity() {
 
         isEditind = intent.hasExtra(DetailsActivity.EXTRA_PRODUCT_SKU)
 
+        uploadProductViewModel.productsList.observe(this, Observer {
+            uploadProductViewModel.saveProductToDb(it!!)
+            uploadProductViewModel.insertImageToDB(it!!)
+            finish()
+        })
+
+        //Editing
         if (isEditind == true) {
 
             sku = intent.getStringExtra(DetailsActivity.EXTRA_PRODUCT_SKU)
             val productWithImage = productDao.getProductWithImagesbySKU(sku)
             et_name.setText(productWithImage.productRoom.name)
             et_price.setText(productWithImage.productRoom.price.toString())
-
         }
 
-        button_OK.setOnClickListener {
+        button_apply.setOnClickListener {
+            //Editing
             if (isEditind == true) {
                 val product = ProductForAdding(
                     name = et_name.text.toString(),
                     price = et_price.text.toString().toDouble(),
-                    sku = et_name.text.toString(),
-                    weight = 20,
-                    extension_attributes = ExtensionAttributes(category_links = listOf(CategoryLink(2.toString())))
+                    sku = et_name.text.toString()
                 )
-                if (!selectedImage.isNullOrEmpty()) {
-                    uploadProductViewModel.updateProduct(
-                        uploadProductViewModel.callbackUpdateLivedata,
-                        sku,
-                        product,
-                        selectedImage!!
-                    )
-                }
+                uploadProductViewModel.updateProduct(
+                    uploadProductViewModel.callbackUpdateLivedata,
+                    sku,
+                    product,
+                    selectedImage
+                )
+                //Inserting
             } else {
                 val product = ProductForAdding(
                     name = et_name.text.toString(),
                     price = et_price.text.toString().toDouble(),
-                    sku = et_name.text.toString(),
-                    weight = 20
+                    sku = et_name.text.toString()
                 )
-                if (!selectedImage.isNullOrEmpty()) {
-                    uploadProductViewModel.insertProduct(
-                        uploadProductViewModel.callbackInsertLivedata,
-                        product,
-                        selectedImage!!
-                    )
-                }
+                uploadProductViewModel.insertProduct(
+                    uploadProductViewModel.callbackInsertLivedata,
+                    product,
+                    selectedImage
+                )
+
             }
         }
 
-        uploadProductViewModel.callbackUpdateLivedata.observe(this, Observer { if (it == true) finish() })
-        uploadProductViewModel.callbackInsertLivedata.observe(this, Observer { if (it == true) finish() })
+        uploadProductViewModel.callbackUpdateLivedata.observe(this, Observer {
+            if (it == true)
+                uploadProductViewModel.getAllProducts()
+        })
+        uploadProductViewModel.callbackInsertLivedata.observe(this, Observer {
+            if (it == true)
+                uploadProductViewModel.getAllProducts()
+        })
 
         uploadProductViewModel.allCategories.observe(this, Observer {
             сategoriesToList(it!!)
@@ -116,7 +122,6 @@ class UploadProductActivity : AppCompatActivity() {
             intent.action = Intent.ACTION_GET_CONTENT
             startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE)
         }
-
 
         btn_add_category.setOnClickListener {
 
@@ -136,6 +141,21 @@ class UploadProductActivity : AppCompatActivity() {
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     Log.i("Click", "positions $position")
                     Log.i("Click", "id ${listOfCategory.get(position).id}")
+                    val product = ProductForAdding(
+                        name = et_name.text.toString(),
+                        price = et_price.text.toString().toDouble(),
+                        sku = et_name.text.toString(),
+                        weight = 20,
+                        extension_attributes = ExtensionAttributes(
+                            category_links = listOf(CategoryLink(listOfCategory.get(position).id.toString()))
+                        )
+                    )
+                    uploadProductViewModel.updateProduct(
+                        uploadProductViewModel.callbackUpdateLivedata,
+                        sku,
+                        product,
+                        selectedImage
+                    )
                 }
             }
             dialog.button_OK.setOnClickListener {
@@ -184,8 +204,6 @@ class UploadProductActivity : AppCompatActivity() {
             getNamesOfCategories(item)
         }
     }
-
-
 }
 
 

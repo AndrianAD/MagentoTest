@@ -3,22 +3,25 @@ package com.example.magentotest.Activity.ViewModels
 
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
-import com.example.magentotest.ProductDAO
-import com.example.magentotest.ProductsRoomDatabase
-import com.example.magentotest.RetrofitAPI
-import com.example.magentotest.RoomAPI
+import android.arch.lifecycle.MutableLiveData
+import com.example.magentotest.*
+import com.example.magentotest.data.Product.Product
 
 class DetailsActivityViewModel(application: Application) : AndroidViewModel(application) {
 
     private var retrofitAPI: RetrofitAPI = RetrofitAPI()
     private var roomAPI: RoomAPI = RoomAPI()
     private var productDB: ProductsRoomDatabase
-
+    var callbackGetProductbySKU = MutableLiveData<Product>()
     var productDao: ProductDAO
 
     init {
-        productDB = ProductsRoomDatabase.getInstance(application)!!
+        productDB = App.DataBASE
         productDao = productDB.userDao()
+    }
+
+    fun getProductbySKU(sku: String) {
+        retrofitAPI.getProductbySKU(sku, callbackGetProductbySKU)
     }
 
     override fun onCleared() {

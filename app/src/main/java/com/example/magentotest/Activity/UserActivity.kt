@@ -13,12 +13,11 @@ import com.example.magentotest.Activity.ViewModels.UserViewModel
 import com.example.magentotest.Adapter.ProductAdapter
 import com.example.magentotest.App
 import com.example.magentotest.R
-import com.example.magentotest.RetrofitAPI
 import com.example.magentotest.Utils.toast
 import com.example.magentotest.data.CategorieForAdding.CategorieForAdding
 import com.example.magentotest.data.CategorieForAdding.Category
 import kotlinx.android.synthetic.main.activity_user.*
-import kotlinx.android.synthetic.main.dialog_new_category.*
+import kotlinx.android.synthetic.main.dialog_add_new_category.*
 
 class UserActivity : AppCompatActivity() {
 
@@ -26,13 +25,23 @@ class UserActivity : AppCompatActivity() {
         ViewModelProviders.of(this).get(UserViewModel::class.java)
     }
 
+    companion object {
+        const val EXTRA_TOKEN = "EXTRA_TOKEN"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_user)
 
 
-        App.token = intent.getStringExtra("Token")
+        App.token = intent.getStringExtra(EXTRA_TOKEN)
         recyclerView.layoutManager = LinearLayoutManager(this)
+
+        userViewModel.productsList.observe(this, Observer {
+            userViewModel.saveProductToDb()
+            userViewModel.insertImageToDB(it!!)
+            userViewModel.getAllProduct("Room")
+        })
 
         userViewModel.getAllProduct("Room")
         userViewModel.getAllProduct("Retrofit")
@@ -75,7 +84,7 @@ class UserActivity : AppCompatActivity() {
             R.id.add_new_category -> {
                 val dialog = AlertDialog.Builder(this)
                     .setTitle("Add new Category")
-                    .setView(R.layout.dialog_new_category)
+                    .setView(R.layout.dialog_add_new_category)
                     .create()
                 dialog.show()
 
@@ -83,7 +92,7 @@ class UserActivity : AppCompatActivity() {
                     var newCategory = Category()
                     if (!dialog.et_add_name.text.isNullOrEmpty()) {
                         newCategory.name = dialog.et_add_name.text.toString()
-                        userViewModel.insertCategory(RetrofitAPI(),CategorieForAdding(newCategory))
+                        userViewModel.insertCategory(CategorieForAdding(newCategory))
                         userViewModel.callbackAddingCategory.observe(
                             this,
                             Observer {

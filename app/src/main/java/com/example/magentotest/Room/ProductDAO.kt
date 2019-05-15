@@ -16,7 +16,13 @@ interface ProductDAO {
     fun insert(product: ProductRoom)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertProductRoomList(list: List<ProductRoom>)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertImage(image: ImageRoom)
+
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    fun insertListOfImage(list: List<ImageRoom>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insertCategory(category: CategoryRoom)

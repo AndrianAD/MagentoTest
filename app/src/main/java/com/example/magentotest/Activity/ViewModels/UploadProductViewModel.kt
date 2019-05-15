@@ -3,11 +3,11 @@ package com.example.magentotest.Activity.ViewModels
 import android.app.Application
 import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
-import com.example.magentotest.ProductDAO
-import com.example.magentotest.ProductsRoomDatabase
-import com.example.magentotest.RetrofitAPI
-import com.example.magentotest.RoomAPI
+import android.util.Log
+import com.example.magentotest.*
+import com.example.magentotest.Utils.Utils
 import com.example.magentotest.data.CategoryPojo
+import com.example.magentotest.data.Product.ProductList
 import com.example.magentotest.data.ProductForAdding.ProductForAdding
 
 class UploadProductViewModel(application: Application) : AndroidViewModel(application) {
@@ -17,27 +17,52 @@ class UploadProductViewModel(application: Application) : AndroidViewModel(applic
     var callbackUpdateLivedata = MutableLiveData<Boolean>()
     var callbackInsertLivedata = MutableLiveData<Boolean>()
     var allCategories: MutableLiveData<CategoryPojo> = MutableLiveData()
+    var productsList = MutableLiveData<ProductList>()
 
     private var productDB: ProductsRoomDatabase
     var productDao: ProductDAO
 
     init {
-        productDB = ProductsRoomDatabase.getInstance(application)!!
+        productDB = App.DataBASE
         productDao = productDB.userDao()
     }
 
-    fun insertProduct(livedata: MutableLiveData<Boolean>,product: ProductForAdding, selectedImage: String) {
-        retrofitAPI.insertProduct(livedata,product, selectedImage)
+    fun insertProduct(livedata: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String?) {
+        retrofitAPI.insertProduct(livedata, product, selectedImage)
     }
 
-
-    fun updateProduct(livedata: MutableLiveData<Boolean>, sku:String, product: ProductForAdding, selectedImage: String) {
-       retrofitAPI.updateProduct(livedata,sku,product,selectedImage)
+    fun updateProduct(
+        livedata: MutableLiveData<Boolean>,
+        sku: String,
+        product: ProductForAdding,
+        selectedImage: String?
+    ) {
+        retrofitAPI.updateProduct(livedata, sku, product, selectedImage)
     }
 
     fun getAllCategories() {
         retrofitAPI.getAllCategories(allCategories)
     }
+
+    fun getAllProducts() {
+        retrofitAPI.getAllProductsFromServer(productsList)
+    }
+
+    fun insertImageToDB(productList: ProductList) {
+        if (productsList != null) {
+            roomAPI.insertImage(productList)
+        }
+    }
+
+
+    fun saveProductToDb(products: ProductList) {
+
+        Log.i("Magento", "saveToDB, " + ", thread: " + Thread.currentThread().name)
+        val listOfProductRoom = Utils.convertProductsToProductsRoom(products)
+        roomAPI.insertProductRoomList(listOfProductRoom)
+
+    }
+
 
     override fun onCleared() {
         super.onCleared()

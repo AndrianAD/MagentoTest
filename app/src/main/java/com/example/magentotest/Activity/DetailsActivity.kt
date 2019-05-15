@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import com.bumptech.glide.Glide
 import com.example.magentotest.Activity.ViewModels.DetailsActivityViewModel
+import com.example.magentotest.App
 import com.example.magentotest.ProductDAO
 import com.example.magentotest.ProductsRoomDatabase
 import com.example.magentotest.R
@@ -27,20 +28,16 @@ class DetailsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_details)
 
-        productDB = ProductsRoomDatabase.getInstance(this)!!
+        productDB = App.DataBASE
         productDao = productDB.userDao()
+
+    }
+
+    override fun onResume() {
+        super.onResume()
 
         var sku = intent.getStringExtra(EXTRA_PRODUCT_SKU)
         var productWithImage = productDao.getProductWithImagesbySKU(sku)
-
-
-//        detailsActivityViewModel.getCategoryById()
-//        detailsActivityViewModel.idCategory.observe(this, Observer {
-//            if (it != null) {
-//                current_category.text = it.name
-//            }
-//        })
-
         tv_name_details.text = "name:  " + productWithImage.productRoom.name
         tv_price_details.text = "price:  " + productWithImage.productRoom.price.toString() + "$"
 
@@ -57,8 +54,6 @@ class DetailsActivity : AppCompatActivity() {
             .error(R.drawable.no_image_available)
             .into(imageView_details)
 
-
-
         button_edit.setOnClickListener {
             //TODO: check if not null sku
             var intent = Intent(this@DetailsActivity, UploadProductActivity::class.java)
@@ -66,9 +61,10 @@ class DetailsActivity : AppCompatActivity() {
             startActivity(intent)
         }
 
-
     }
 
-
+    override fun onStart() {
+        super.onStart()
+    }
 }
 

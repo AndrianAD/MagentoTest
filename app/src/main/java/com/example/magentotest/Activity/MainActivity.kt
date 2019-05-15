@@ -1,18 +1,15 @@
-package com.example.magentotest
+package com.example.magentotest.Activity
 
-import android.content.Context
 import android.content.Intent
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
+import android.support.v7.app.AppCompatActivity
 import android.util.Log
-import android.widget.Toast
-import com.example.magentotest.Activity.UserActivity
+import com.example.magentotest.R
 import com.example.magentotest.Retrofit.RetrofitFactory
 import com.example.magentotest.data.Credentials
 import kotlinx.android.synthetic.main.activity_main.*
 import retrofit2.Call
 import retrofit2.Response
-
 
 
 class MainActivity : AppCompatActivity() {
@@ -44,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                     Log.v("retrofit", response.message())
                     token = response.body() ?: "null"
                     var intent= Intent(this@MainActivity, UserActivity::class.java)
-                    intent.putExtra("Token", token)
+                    intent.putExtra(UserActivity.EXTRA_TOKEN, token)
                     startActivity(intent)
                 }
             })

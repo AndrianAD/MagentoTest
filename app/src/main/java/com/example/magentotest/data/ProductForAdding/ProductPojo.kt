@@ -13,6 +13,6 @@ data class ProductForAdding(
     val status: Int = 1,
     val type_id: String = "simple",
     val attribute_set_id: Int = 4,
-    val weight: Int,
+    val weight: Int=0,
     val extension_attributes:ExtensionAttributes?=null
 )
