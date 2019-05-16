@@ -10,6 +10,7 @@ import com.example.magentotest.App
 import com.example.magentotest.ProductDAO
 import com.example.magentotest.ProductsRoomDatabase
 import com.example.magentotest.R
+import com.example.magentotest.Room.Model.CategoryRoom
 import com.example.magentotest.Utils.imageBaseURL
 import kotlinx.android.synthetic.main.activity_details.*
 
@@ -36,10 +37,19 @@ class DetailsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+
         var sku = intent.getStringExtra(EXTRA_PRODUCT_SKU)
         var productWithImage = productDao.getProductWithImagesbySKU(sku)
         tv_name_details.text = "name:  " + productWithImage.productRoom.name
         tv_price_details.text = "price:  " + productWithImage.productRoom.price.toString() + "$"
+        var categories: List<CategoryRoom> = detailsActivityViewModel.getCategoriesByProductSku(sku)
+        var cateriesId = ""
+        for (item in categories) {
+            cateriesId +="""id:" ${item.categoryId}"""
+
+        }
+        tv_categories.text = cateriesId
+
 
         var finalUrl: Any
         if (productWithImage.images.size > 0) {

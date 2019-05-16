@@ -38,17 +38,13 @@ class UserActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
 
         userViewModel.productsList.observe(this, Observer {
-            userViewModel.saveProductToDb()
-            userViewModel.insertImageToDB(it!!)
-            userViewModel.insertCategoryRoom(it)
-
-
+            userViewModel.clearDataBase()
+            userViewModel.saveProduct(it!!)
             userViewModel.getAllProduct("Room")
         })
 
         swipe_refresh.setOnRefreshListener {
-            userViewModel.productDao.deleteAllImages()
-            userViewModel.productDao.deleteAllProducts()
+            userViewModel.clearDataBase()
             userViewModel.getAllProduct("Retrofit")
             swipe_refresh.isRefreshing = false
 
@@ -64,6 +60,7 @@ class UserActivity : AppCompatActivity() {
             }
         })
     }
+
     override fun onResume() {
         super.onResume()
         userViewModel.getAllProduct("Room")

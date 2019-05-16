@@ -9,6 +9,7 @@ import com.example.magentotest.Room.Model.ImageRoom
 import com.example.magentotest.Room.Model.ProductRoom
 import com.example.magentotest.Room.Model.ProductWithImagesAndCategory
 
+
 @Dao
 interface ProductDAO {
 
@@ -44,5 +45,13 @@ interface ProductDAO {
 
     @Query("DELETE FROM IMAGES")
     fun deleteAllImages()
+
+    @Query("DELETE FROM category")
+    fun deleteAllCategories()
+
+    @Query("Select * FROM category WHERE product_sku = :sku")
+    fun getCategoriesBySKU(sku: String): List<CategoryRoom>
+
+
 
 }

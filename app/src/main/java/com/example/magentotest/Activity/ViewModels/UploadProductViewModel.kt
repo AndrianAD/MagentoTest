@@ -1,7 +1,6 @@
 package com.example.magentotest.Activity.ViewModels
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.example.magentotest.*
@@ -10,7 +9,8 @@ import com.example.magentotest.Model.Product.ProductList
 import com.example.magentotest.Model.ProductForAdding.ProductForAdding
 import com.example.magentotest.Utils.Utils
 
-class UploadProductViewModel(application: Application) : AndroidViewModel(application) {
+class UploadProductViewModel(application: Application) : BaseViewModel(application) {
+
 
     private var retrofitAPI: RetrofitAPI = RetrofitAPI()
     private var roomAPI: RoomAPI = RoomAPI()
@@ -51,10 +51,10 @@ class UploadProductViewModel(application: Application) : AndroidViewModel(applic
     }
 
 
-    fun saveProductToDb(products: ProductList) {
+    fun saveProductToDb(productList: ProductList) {
 
         Log.i("Magento", "saveToDB, " + ", thread: " + Thread.currentThread().name)
-        val listOfProductRoom = Utils.convertProductsToProductsRoom(products)
+        val listOfProductRoom = Utils.convertProductsToProductsRoom(productList)
         roomAPI.insertProductRoomList(listOfProductRoom)
 
     }

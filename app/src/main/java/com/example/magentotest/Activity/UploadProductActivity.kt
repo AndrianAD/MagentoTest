@@ -55,8 +55,7 @@ class UploadProductActivity : AppCompatActivity() {
         isEditind = intent.hasExtra(DetailsActivity.EXTRA_PRODUCT_SKU)
 
         uploadProductViewModel.productsList.observe(this, Observer {
-            uploadProductViewModel.saveProductToDb(it!!)
-            uploadProductViewModel.insertImageToDB(it!!)
+            uploadProductViewModel.saveProduct(it!!)
             finish()
         })
 
@@ -135,14 +134,14 @@ class UploadProductActivity : AppCompatActivity() {
                 android.R.layout.simple_spinner_dropdown_item,
                 namesOfCategories
             )
-            var clickedItem:Int=0
+            var clickedItem: Int = 0
             dialog.spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
 
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                     Log.i("Click", "positions $position")
                     Log.i("Click", "id ${listOfCategory.get(position).id}")
-                    clickedItem=position
+                    clickedItem = position
                 }
             }
             dialog.button_OK.setOnClickListener {

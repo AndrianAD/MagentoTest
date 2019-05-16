@@ -1,7 +1,6 @@
 package com.example.magentotest.Activity.ViewModels
 
 import android.app.Application
-import android.arch.lifecycle.AndroidViewModel
 import android.arch.lifecycle.MutableLiveData
 import android.util.Log
 import com.example.magentotest.*
@@ -9,7 +8,7 @@ import com.example.magentotest.Model.CategorieForAdding.CategorieForAdding
 import com.example.magentotest.Model.Product.ProductList
 import com.example.magentotest.Utils.Utils
 
-class UserViewModel(application: Application) : AndroidViewModel(application) {
+class UserViewModel(application: Application) : BaseViewModel(application) {
 
     var productsList = MutableLiveData<ProductList>()
     var productWithImage = MutableLiveData<Boolean>()
