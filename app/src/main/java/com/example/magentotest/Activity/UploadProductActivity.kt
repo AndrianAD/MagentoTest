@@ -16,6 +16,7 @@ import android.view.Window
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import com.example.magentotest.Activity.ViewModels.UploadProductViewModel
+import com.example.magentotest.App
 import com.example.magentotest.Model.CategoryPojo
 import com.example.magentotest.Model.Product.CategoryLink
 import com.example.magentotest.Model.Product.ExtensionAttributes
@@ -49,7 +50,7 @@ class UploadProductActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_upload_product)
 
-        productDB = ProductsRoomDatabase.getInstance(this)!!
+        productDB = App.DataBASE
         productDao = productDB.userDao()
 
         isEditind = intent.hasExtra(DetailsActivity.EXTRA_PRODUCT_SKU)

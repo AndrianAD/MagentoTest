@@ -1,5 +1,6 @@
 package com.example.magentotest.Activity
 
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -24,6 +25,7 @@ class DetailsActivity : AppCompatActivity() {
     }
     lateinit var productDB: ProductsRoomDatabase
     lateinit var productDao: ProductDAO
+    var categoriesName = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,18 +39,20 @@ class DetailsActivity : AppCompatActivity() {
     override fun onResume() {
         super.onResume()
 
+        detailsActivityViewModel.callbackGetCategoryById.observe(this, Observer {
+            categoriesName += "${it?.name}   "
+            tv_categories.text = categoriesName
+        })
 
         var sku = intent.getStringExtra(EXTRA_PRODUCT_SKU)
         var productWithImage = productDao.getProductWithImagesbySKU(sku)
         tv_name_details.text = "name:  " + productWithImage.productRoom.name
         tv_price_details.text = "price:  " + productWithImage.productRoom.price.toString() + "$"
-        var categories: List<CategoryRoom> = detailsActivityViewModel.getCategoriesByProductSku(sku)
-        var cateriesId = ""
-        for (item in categories) {
-            cateriesId +="""id:" ${item.categoryId}"""
 
+        var categories: List<CategoryRoom> = detailsActivityViewModel.getCategoriesByProductSku(sku)
+        for (item in categories) {
+            detailsActivityViewModel.getCategoriesByID(item.categoryId.toInt())
         }
-        tv_categories.text = cateriesId
 
 
         var finalUrl: Any

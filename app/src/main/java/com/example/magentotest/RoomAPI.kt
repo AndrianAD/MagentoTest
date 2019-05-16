@@ -32,7 +32,6 @@ class RoomAPI {
         }
     }
 
-
     fun insertCategory(productList: ProductList) {
         if (productList.items.isNotEmpty()) {
             val listOfCategoryRoom: ArrayList<CategoryRoom> = ArrayList()

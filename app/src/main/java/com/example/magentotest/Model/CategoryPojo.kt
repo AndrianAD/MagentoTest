@@ -1,12 +1,12 @@
 package com.example.magentotest.Model
 
 data class CategoryPojo(
-    val children_data: List<CategoryPojo>,
-    val id: Int,
-    val is_active: Boolean,
-    val level: Int,
-    val name: String,
-    val parent_id: Int,
-    val position: Int,
-    val product_count: Int
+    var children_data: List<CategoryPojo>,
+    var id: Int,
+    var is_active: Boolean,
+    var level: Int,
+    var name: String,
+    var parent_id: Int,
+    var position: Int,
+    var product_count: Int
 )

@@ -35,7 +35,6 @@ class RetrofitAPI {
     }
 
     fun getCategoryById(id: Int, callback: MutableLiveData<CategoryPojo>) {
-
         retrofit!!.getCategorieById(id, "Bearer ${App.token}").enqueue(object : Callback<CategoryPojo> {
             override fun onFailure(call: Call<CategoryPojo>, t: Throwable) {
                 Log.e("Error getCategoriesById", t.message)
@@ -43,11 +42,9 @@ class RetrofitAPI {
 
             override fun onResponse(call: Call<CategoryPojo>, response: Response<CategoryPojo>) {
                 Log.i("OK - getCategoriesById", response.body().toString())
-                callback.postValue(response.body())
+                callback.value = response.body()
             }
         })
-
-
     }
 
     fun insertCategory(category: CategorieForAdding, callback: MutableLiveData<Boolean>) {
@@ -80,18 +77,23 @@ class RetrofitAPI {
 
     }
 
-    fun updateProduct(callback: MutableLiveData<Boolean>, sku: String, product: ProductForAdding, selectedImage: String?) {
+    fun updateProduct(
+        callback: MutableLiveData<Boolean>,
+        sku: String,
+        product: ProductForAdding,
+        selectedImage: String?
+    ) {
         retrofit!!.updateProduct(sku, ProductPojo(product), "Bearer ${App.token}")
             .enqueue(object : Callback<ProductList> {
                 override fun onFailure(call: Call<ProductList>, t: Throwable) {
                     Log.e("retrofit", t.message)
-                   callback.postValue(false)
+                    callback.postValue(false)
                 }
 
                 override fun onResponse(call: Call<ProductList>, response: Response<ProductList>) {
                     Log.i("retrofit", response.body().toString())
                     if (selectedImage == null) {
-                       callback.postValue(true)
+                        callback.postValue(true)
                     } else {
                         attachImageToProduct(callback, product, selectedImage)
                     }
@@ -99,7 +101,7 @@ class RetrofitAPI {
             })
     }
 
-     fun insertProduct(callback: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String?) {
+    fun insertProduct(callback: MutableLiveData<Boolean>, product: ProductForAdding, selectedImage: String?) {
 
         retrofit!!.addProduct(ProductPojo(product), "Bearer ${App.token}")
             .enqueue(object : Callback<ProductList> {

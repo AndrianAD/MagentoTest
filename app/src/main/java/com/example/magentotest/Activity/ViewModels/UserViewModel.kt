@@ -6,7 +6,6 @@ import android.util.Log
 import com.example.magentotest.*
 import com.example.magentotest.Model.CategorieForAdding.CategorieForAdding
 import com.example.magentotest.Model.Product.ProductList
-import com.example.magentotest.Utils.Utils
 
 class UserViewModel(application: Application) : BaseViewModel(application) {
 
@@ -34,30 +33,9 @@ class UserViewModel(application: Application) : BaseViewModel(application) {
         }
     }
 
-
-    fun insertImageToDB(productList: ProductList) {
-        roomAPI.insertImage(productList)
-    }
-
-
     fun insertCategoryRetrofit(category: CategorieForAdding) {
         retrofitAPI.insertCategory(category, callbackAddingCategory)
     }
-
-    fun insertCategoryRoom(productList: ProductList) {
-        roomAPI.insertCategory(productList)
-    }
-
-
-
-
-    fun saveProductToDb() {
-        Log.e("Magento", "saveToDB, " + ", thread: " + Thread.currentThread().name)
-        val listOfProductRoom = Utils.convertProductsToProductsRoom(productsList.value!!)
-        roomAPI.insertProductRoomList(listOfProductRoom)
-    }
-
-
     override fun onCleared() {
         super.onCleared()
     }

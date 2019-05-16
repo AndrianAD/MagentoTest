@@ -9,9 +9,9 @@
 
     <ImageView android:layout_width="300dp"
                android:layout_height="300dp"
+               android:layout_marginTop="10dp"
                tools:layout_editor_absoluteY="162dp"
                tools:layout_editor_absoluteX="64dp"
-               android:layout_margin="30dp"
                android:id="@+id/imageView_details"
                app:layout_constraintTop_toBottomOf="@id/tv_price_details"
                app:layout_constraintStart_toStartOf="parent"
@@ -47,11 +47,12 @@
 
     <TextView android:layout_width="wrap_content"
               android:layout_height="wrap_content"
-              app:layout_constraintStart_toStartOf="parent"
-              app:layout_constraintEnd_toEndOf="parent"
               android:id="@+id/tv_categories"
+              tools:text="Categories"
               app:layout_constraintTop_toBottomOf="@id/imageView_details"
-              android:text="Categories:"/>
+              app:layout_constraintStart_toStartOf="parent"
+              app:layout_constraintEnd_toEndOf="parent"/>
+
     <Button
             android:text="Edit"
             android:layout_width="wrap_content"
