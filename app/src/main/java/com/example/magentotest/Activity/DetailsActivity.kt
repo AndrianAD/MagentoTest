@@ -1,6 +1,5 @@
 package com.example.magentotest.Activity
 
-import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
@@ -11,7 +10,6 @@ import com.example.magentotest.App
 import com.example.magentotest.ProductDAO
 import com.example.magentotest.ProductsRoomDatabase
 import com.example.magentotest.R
-import com.example.magentotest.Room.Model.CategoryRoom
 import com.example.magentotest.Utils.imageBaseURL
 import kotlinx.android.synthetic.main.activity_details.*
 
@@ -25,7 +23,7 @@ class DetailsActivity : AppCompatActivity() {
     }
     lateinit var productDB: ProductsRoomDatabase
     lateinit var productDao: ProductDAO
-    var categoriesName = ""
+    var categoriesId = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,21 +36,21 @@ class DetailsActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-
-        detailsActivityViewModel.callbackGetCategoryById.observe(this, Observer {
-            categoriesName += "${it?.name}   "
-            tv_categories.text = categoriesName
-        })
+        var categoriesId = ""
 
         var sku = intent.getStringExtra(EXTRA_PRODUCT_SKU)
         var productWithImage = productDao.getProductWithImagesbySKU(sku)
         tv_name_details.text = "name:  " + productWithImage.productRoom.name
         tv_price_details.text = "price:  " + productWithImage.productRoom.price.toString() + "$"
 
-        var categories: List<CategoryRoom> = detailsActivityViewModel.getCategoriesByProductSku(sku)
-        for (item in categories) {
-            detailsActivityViewModel.getCategoriesByID(item.categoryId.toInt())
+        for(category in productWithImage.categories){
+            categoriesId+="${category.categoryId}     "
         }
+        tv_categories.text=categoriesId
+
+
+
+
 
 
         var finalUrl: Any
