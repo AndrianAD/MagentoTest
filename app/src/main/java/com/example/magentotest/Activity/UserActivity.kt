@@ -37,6 +37,9 @@ class UserActivity : AppCompatActivity() {
         App.token = intent.getStringExtra(EXTRA_TOKEN)
         recyclerView.layoutManager = LinearLayoutManager(this)
 
+        userViewModel.getAllProduct("Room")
+        userViewModel.getAllProduct("Retrofit")
+
         userViewModel.productsList.observe(this, Observer {
             userViewModel.clearDataBase()
             userViewModel.saveProduct(it!!)
@@ -60,13 +63,6 @@ class UserActivity : AppCompatActivity() {
             }
         })
     }
-
-    override fun onResume() {
-        super.onResume()
-        userViewModel.getAllProduct("Room")
-        userViewModel.getAllProduct("Retrofit")
-    }
-
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
         getMenuInflater().inflate(R.menu.main_menu, menu)

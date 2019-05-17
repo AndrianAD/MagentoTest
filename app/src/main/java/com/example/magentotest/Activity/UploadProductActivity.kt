@@ -24,6 +24,8 @@ import com.example.magentotest.Model.ProductForAdding.ProductForAdding
 import com.example.magentotest.ProductDAO
 import com.example.magentotest.ProductsRoomDatabase
 import com.example.magentotest.R
+import io.reactivex.Single
+import io.reactivex.android.schedulers.AndroidSchedulers
 import kotlinx.android.synthetic.main.activity_upload_product.*
 import kotlinx.android.synthetic.main.dialog_category.*
 import java.io.ByteArrayOutputStream
@@ -56,8 +58,13 @@ class UploadProductActivity : AppCompatActivity() {
         isEditind = intent.hasExtra(DetailsActivity.EXTRA_PRODUCT_SKU)
 
         uploadProductViewModel.productsList.observe(this, Observer {
-            uploadProductViewModel.saveProduct(it!!)
-            finish()
+            Single.fromCallable { uploadProductViewModel.saveProduct(it!!) }.map {
+            }.subscribeOn(AndroidSchedulers.mainThread()).doAfterTerminate {
+                setResult(DetailsActivity.UPDATE_UI)
+                finish()
+            }.subscribe()
+
+
         })
 
         //Editing
@@ -101,11 +108,13 @@ class UploadProductActivity : AppCompatActivity() {
 
         uploadProductViewModel.callbackUpdateLivedata.observe(this, Observer {
             if (it == true)
-                uploadProductViewModel.getAllProducts()
+                uploadProductViewModel.clearDataBase()
+            uploadProductViewModel.getAllProducts()
         })
         uploadProductViewModel.callbackInsertLivedata.observe(this, Observer {
             if (it == true)
-                uploadProductViewModel.getAllProducts()
+                uploadProductViewModel.clearDataBase()
+            uploadProductViewModel.getAllProducts()
         })
 
         uploadProductViewModel.allCategories.observe(this, Observer {

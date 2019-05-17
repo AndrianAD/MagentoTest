@@ -80,7 +80,6 @@ class ProductAdapter(productListAndCategory: List<ProductWithImagesAndCategory>)
                         var intent = Intent(context, UploadProductActivity::class.java)
                         intent.putExtra(DetailsActivity.EXTRA_PRODUCT_SKU, listProductAndCategories.get(position).productRoom.sku)
                         context.startActivity(intent)
-
                     }
                     R.id.delete_product -> {
                         context.toast("Delete")

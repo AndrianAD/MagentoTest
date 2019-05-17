@@ -16,9 +16,9 @@ abstract class BaseViewModel(application: Application) : AndroidViewModel(applic
 
         Log.i("Magento", "saveProductsAndImagesToDB, " + ", thread: " + Thread.currentThread().name)
         val listOfProductRoom = Utils.convertProductsToProductsRoom(productsList)
-        roomAPI.insertProductRoomList(listOfProductRoom)
         roomAPI.insertImage(productsList)
         roomAPI.insertCategory(productsList)
+        roomAPI.insertProductRoomList(listOfProductRoom)
     }
     fun clearDataBase() {
         roomAPI.productDao.deleteAllProducts()

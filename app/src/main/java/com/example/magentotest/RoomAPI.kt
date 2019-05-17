@@ -33,36 +33,32 @@ class RoomAPI {
     }
 
     fun insertCategory(productList: ProductList) {
-        var name:String=""
-        if (productList.items.isNotEmpty()) {
-            val listOfCategoryRoom: ArrayList<CategoryRoom> = ArrayList()
-            for (product in productList.items) {
-                product.extension_attributes.category_links?.let {
-                    if (it.size > 0) {
-                        for (item in it) {
-                         //  RetrofitAPI().getNameCategoryById(item.category_id.toInt()){s -> name = s }
-                            listOfCategoryRoom.add(
-                                CategoryRoom(
-                                    0,
-                                    item.category_id,
-                                    position = 0,
-                                    productSku = product.sku,name=name))
-                            Log.i("Magento", "insertCategoryToDB" + "thread: " + Thread.currentThread().name)
+            if (productList.items.isNotEmpty()) {
+                for (product in productList.items) {
+                    product.extension_attributes.category_links?.let {
+                        if (it.size > 0) {
+                            for (item in it) {
+                                RetrofitAPI().getNameCategoryById(item.category_id.toInt()) { categoryName ->
+                                    productDao.insertCategory(
+                                        CategoryRoom(
+                                            0,
+                                            item.category_id,
+                                            position = 0,
+                                            productSku = product.sku, name = categoryName ?: ""
+                                        )
+                                    )
+                                }
+                                Log.i("Magento", "insertCategoryToDB" + "thread: " + Thread.currentThread().name)
+                            }
                         }
                     }
                 }
-
             }
-            for (item in listOfCategoryRoom) {
-                productDao.insertCategory(item)
-            }
-        }
     }
 
     fun getAllProductFromRoom(viewModel: UserViewModel) {
         App.productWithImageAndCategories = productDao.loadProductWithImages()
         viewModel.productWithImage.postValue(true)
     }
-
 
 }
