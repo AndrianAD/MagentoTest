@@ -34,14 +34,15 @@ class RetrofitAPI {
         })
     }
 
-    fun getNameCategoryById(id: Int){
-        retrofit!!.getCategorieById(id, "Bearer ${App.token}").enqueue(object : Callback<CategoryPojo> {
+    fun getNameCategoryById(id: Int, callback:(String) -> Unit) {
+        retrofit?.getCategorieById(id, "Bearer ${App.token}")?.enqueue(object : Callback<CategoryPojo> {
             override fun onFailure(call: Call<CategoryPojo>, t: Throwable) {
                 Log.e("Error getCategoriesById", t.message)
             }
 
             override fun onResponse(call: Call<CategoryPojo>, response: Response<CategoryPojo>) {
                 Log.i("OK - getCategoriesById", response.body().toString())
+                callback.invoke(response.body()!!.name)
             }
         })
     }

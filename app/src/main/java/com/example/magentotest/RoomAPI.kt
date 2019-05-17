@@ -33,14 +33,22 @@ class RoomAPI {
     }
 
     fun insertCategory(productList: ProductList) {
+        var name:String=""
         if (productList.items.isNotEmpty()) {
             val listOfCategoryRoom: ArrayList<CategoryRoom> = ArrayList()
             for (product in productList.items) {
                 product.extension_attributes.category_links?.let {
-                    if (it.size>0) {
-                        for (item in product.extension_attributes.category_links!!)
-                            listOfCategoryRoom.add(CategoryRoom(0, item.category_id,position = 0,productSku = product.sku ))
-                        Log.i("Magento", "insertCategoryToDB" + "thread: " + Thread.currentThread().name)
+                    if (it.size > 0) {
+                        for (item in it) {
+                         //  RetrofitAPI().getNameCategoryById(item.category_id.toInt()){s -> name = s }
+                            listOfCategoryRoom.add(
+                                CategoryRoom(
+                                    0,
+                                    item.category_id,
+                                    position = 0,
+                                    productSku = product.sku,name=name))
+                            Log.i("Magento", "insertCategoryToDB" + "thread: " + Thread.currentThread().name)
+                        }
                     }
                 }
 

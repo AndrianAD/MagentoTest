@@ -14,5 +14,6 @@ class CategoryRoom(
     val categoryId: String,
     val position: Int,
     @ColumnInfo(name = "product_sku")
-    var productSku: String
+    var productSku: String,
+    var name:String
 )
